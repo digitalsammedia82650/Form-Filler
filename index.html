@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FormFiller — India Job Portal</title>
+<style>
+:root {
+  --ink: #0f1117; --ink-2: #3a3d4a; --ink-3: #8a8fa8;
+  --surface: #ffffff; --surface-2: #f5f6fa; --border: #e0e2ec;
+  --accent: #1d4ed8; --accent-lt: #eff4ff; --green: #15803d;
+  --r:8px; --rs:5px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;background:var(--surface-2);color:var(--ink);font-family:system-ui,sans-serif;}
+
+/* Header & Toolbars */
+.topbar{height:50px;background:var(--ink);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;}
+.logo{display:flex;align-items:center;gap:9px;color:#fff;font-weight:700;font-size:14px;}
+.logo-box{width:26px;height:26px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.tb-r{margin-left:auto;display:flex;gap:7px;}
+.btn-hdr{padding:5px 12px;border-radius:var(--rs);border:1px solid rgba(255,255,255,.18);background:transparent;color:rgba(255,255,255,.75);font-size:11px;cursor:pointer;}
+
+.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.step{display:flex;align-items:center;gap:10px;background:var(--surface-2);padding:6px 12px;border-radius:var(--r);border:1px solid var(--border);}
+.step-n{width:20px;height:20px;background:var(--accent);color:#fff;border-radius:50%;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:bold;}
+input[type="file"]{font-size:11px;max-width:180px;}
+
+.btn{padding:8px 16px;border-radius:var(--rs);border:none;cursor:pointer;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:0.1s;}
+.btn-blue{background:var(--accent);color:#fff;}
+.btn-green{background:var(--green);color:#fff;}
+.btn-dark{background:var(--ink);color:#fff;}
+
+/* Layout */
+.workspace{flex:1;display:flex;overflow:hidden;}
+.pane{display:flex;flex-direction:column;background:var(--surface);}
+.pane-form{flex:1.6;border-right:1px solid var(--border);}
+.pane-resume{flex:1;}
+.pane-head{padding:10px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.pane-title{font-size:11px;font-weight:700;color:var(--ink-3);letter-spacing:1px;}
+
+.form-scroll{flex:1;overflow-y:auto;padding:40px;}
+#formCanvas{outline:none;font-family:'Times New Roman',serif;font-size:15px;line-height:1.8;color:#000;}
+#dataBox{flex:1;border:none;padding:20px;font-family:monospace;font-size:12px;resize:none;background:#fafafa;}
+
+/* Dynamic Highlighting */
+.fv{color:var(--accent);font-weight:700;background:var(--accent-lt);border-bottom:2px solid var(--accent);padding:0 2px;animation:pop 0.3s ease;}
+@keyframes pop{from{transform:scale(0.95);opacity:0;}to{transform:scale(1);opacity:1;}}
+
+/* Overlay & Toasts */
+#prog{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.8);z-index:99;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
+#prog.on{display:flex;}
+.spin{width:24px;height:24px;border:3px solid #ddd;border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo"><div class="logo-box">F</div> FormFiller <span style="font-weight:400;opacity:0.6;margin-left:5px;">| INDIA</span></div>
+  <div class="tb-r"><button class="btn-hdr" onclick="undo()">Undo</button><button class="btn-hdr" onclick="location.reload()">Reset</button></div>
+</div>
+
+<div class="toolbar">
+  <div class="step">
+    <div class="step-n">1</div>
+    <input type="file" id="formFile" accept=".docx,.html,.txt">
+    <button class="btn btn-blue" onclick="loadForm()">Load Form</button>
+  </div>
+  <div class="step">
+    <div class="step-n">2</div>
+    <input type="file" id="resumeFile" accept=".pdf,.docx,.txt">
+    <button class="btn btn-blue" onclick="loadResume()">Extract Resume</button>
+  </div>
+  <button class="btn btn-green" onclick="apply()">Apply to Form</button>
+  <button class="btn btn-dark" onclick="download()">Download PDF</button>
+</div>
+
+<div class="workspace">
+  <div class="pane pane-form">
+    <div class="pane-head"><span class="pane-title">APPLICATION PREVIEW</span></div>
+    <div class="form-scroll"><div id="formCanvas" contenteditable="true">
+      <div style="text-align:center;padding-top:100px;color:#8a8fa8;">
+        <p>Upload a .docx or .html form to begin.</p>
+      </div>
+    </div></div>
+  </div>
+  <div class="pane pane-resume">
+    <div class="pane-head"><span class="pane-title">EXTRACTED DATA</span></div>
+    <textarea id="dataBox" placeholder="Resume text will appear here..."></textarea>
+  </div>
+</div>
+
+<div id="prog"><div class="spin"></div><p id="progMsg">Processing...</p></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+let _history = "";
+const canvas = document.getElementById('formCanvas');
+const dataBox = document.getElementById('dataBox');
+
+async function loadForm() {
+  const file = document.getElementById('formFile').files[0];
+  if(!file) return;
+  document.getElementById('prog').classList.add('on');
+  const ext = file.name.split('.').pop().toLowerCase();
+  if(ext === 'docx') {
+    const res = await mammoth.convertToHtml({arrayBuffer: await file.arrayBuffer()});
+    canvas.innerHTML = res.value;
+  } else {
+    canvas.innerHTML = await file.text();
+  }
+  _history = canvas.innerHTML;
+  document.getElementById('prog').classList.remove('on');
+}
+
+async function loadResume() {
+  const file = document.getElementById('resumeFile').files[0];
+  if(!file) return;
+  document.getElementById('prog').classList.add('on');
+  const ext = file.name.split('.').pop().toLowerCase();
+  if(ext === 'pdf') {
+    const pdfjsLib = window['pdfjs-dist/build/pdf'];
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+    const pdf = await pdfjsLib.getDocument(await file.arrayBuffer()).promise;
+    let text = "";
+    for(let i=1; i<=pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      text += content.items.map(item => item.str).join(" ") + "\n";
+    }
+    dataBox.value = text;
+  } else if(ext === 'docx') {
+    const res = await mammoth.extractRawText({arrayBuffer: await file.arrayBuffer()});
+    dataBox.value = res.value;
+  } else {
+    dataBox.value = await file.text();
+  }
+  document.getElementById('prog').classList.remove('on');
+}
+
+function apply() {
+  _history = canvas.innerHTML;
+  const raw = dataBox.value;
+  const fields = {
+    name: (raw.match(/(?:Name|Full Name)\s*[:\-]\s*([A-Z\s]{3,})|([A-Z][a-z]+\s[A-Z][a-z]+)/) || [])[0],
+    email: (raw.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/) || [""])[0],
+    phone: (raw.match(/(?:\+91|91)?[6-9]\d{9}/) || [""])[0],
+    address: (raw.match(/(?:Address|Location|Residence)\s*[:\-]\s*([^\n,]{5,})/i) || [""])[0],
+    degree: (raw.match(/\b(B\.?Tech|B\.?E|M\.?Tech|MS|BS|MCA|MBA|PhD)\b/i) || [""])[0]
+  };
+
+  const map = [
+    {v: fields.name, k:['Name in Full','Full Name','Candidate Name','Applicant Name']},
+    {v: fields.email, k:['Email','E-mail','Mail ID']},
+    {v: fields.phone, k:['Mobile Number','Phone No','Contact No','Mobile No']},
+    {v: fields.address, k:['Permanent Address','Correspondence Address','Location','Address']},
+    {v: fields.degree, k:['Exam Passed','Highest Qualification','Degree']}
+  ];
+
+  let html = canvas.innerHTML;
+  map.forEach(m => {
+    if(!m.v) return;
+    const cleanVal = m.v.trim();
+    m.k.forEach(key => {
+      // Handles NIT-style table colons and underscores
+      const re = new RegExp('('+key+'\\s*[:\\-–]?\\s*)([\\._\\s\\u00a0]{2,}|(?=<\\/td>))', 'gi');
+      html = html.replace(re, `$1<span class="fv">${cleanVal}</span>`);
+    });
+  });
+  canvas.innerHTML = html;
+}
+
+function undo() { canvas.innerHTML = _history; }
+
+function download() {
+  const opt = { margin: 10, filename: 'Filled_Form.pdf', html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4' }};
+  html2pdf().set(opt).from(canvas).save();
+}
+</script>
+</body>
+</html>
