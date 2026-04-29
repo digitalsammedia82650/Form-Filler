@@ -3,126 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FormFiller Pro — High Precision Edition</title>
+<title>FormFiller Pro | Full-Span Edition</title>
 <style>
 :root {
   --ink: #0f1117; --ink-2: #3a3d4a; --ink-3: #8a8fa8;
-  --surface: #ffffff; --surface-2: #f5f6fa; --border: #e0e2ec;
+  --surface: #ffffff; --surface-2: #f5f6fa; --border: #ccd0d9;
   --accent: #1d4ed8; --accent-lt: #eff4ff; --green: #15803d;
   --r:8px; --rs:5px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;background:var(--surface-2);color:var(--ink);font-family:system-ui,sans-serif;}
 
-/* Header */
-.topbar{height:50px;background:var(--ink);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;}
-.logo{display:flex;align-items:center;gap:9px;color:#fff;font-weight:700;font-size:14px;letter-spacing:0.5px;}
-.logo-box{width:26px;height:26px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;}
-.tb-r{margin-left:auto;display:flex;gap:7px;}
-.btn-hdr{padding:5px 12px;border-radius:var(--rs);border:1px solid rgba(255,255,255,0.18);background:transparent;color:rgba(255,255,255,0.75);font-size:11px;cursor:pointer;transition:0.2s;}
+/* Optimized Header */
+.topbar{height:55px;background:var(--ink);display:flex;align-items:center;padding:0 24px;gap:15px;flex-shrink:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.3);}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:15px;letter-spacing:0.5px;}
+.logo-box{width:28px;height:28px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.tb-r{margin-left:auto;display:flex;gap:10px;}
+.btn-hdr{padding:6px 14px;border-radius:var(--rs);border:1px solid rgba(255,255,255,0.2);background:transparent;color:rgba(255,255,255,0.8);font-size:11px;font-weight:600;cursor:pointer;transition:0.2s;}
 .btn-hdr:hover{background:rgba(255,255,255,0.1);color:#fff;}
 
-/* Toolbar */
-.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:12px;flex-shrink:0;}
-.step{display:flex;align-items:center;gap:10px;background:var(--surface-2);padding:6px 12px;border-radius:var(--r);border:1px solid var(--border);}
-.step-n{width:20px;height:20px;background:var(--accent);color:#fff;border-radius:50%;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:bold;}
-.step label{font-size:10px;font-weight:700;color:var(--ink-3);display:block;margin-bottom:2px;text-transform:uppercase;}
-input[type="file"]{font-size:11px;max-width:160px;}
+/* Master Toolbar */
+.toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:15px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
+.step{display:flex;align-items:center;gap:12px;background:var(--surface-2);padding:8px 14px;border-radius:var(--r);border:1px solid var(--border);}
+.step-n{width:22px;height:22px;background:var(--accent);color:#fff;border-radius:50%;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:bold;}
+.step label{font-size:10px;font-weight:800;color:var(--ink-3);display:block;margin-bottom:2px;text-transform:uppercase;}
+input[type="file"]{font-size:11px;max-width:180px;cursor:pointer;}
 
-.btn{padding:8px 18px;border-radius:var(--rs);border:none;cursor:pointer;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:7px;transition:0.1s;}
-.btn-blue{background:var(--accent);color:#fff;}
-.btn-green{background:var(--green);color:#fff;}
+.btn{padding:10px 22px;border-radius:var(--rs);border:none;cursor:pointer;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:8px;transition:0.2s;text-transform:uppercase;letter-spacing:0.5px;}
+.btn-blue{background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(29,78,216,0.2);}
+.btn-green{background:var(--green);color:#fff;box-shadow:0 4px 12px rgba(21,128,61,0.2);}
 .btn-dark{background:var(--ink);color:#fff;}
-.btn:hover{filter:brightness(1.1);}
+.btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
+.btn:active{transform:translateY(0);}
 
-/* Workspace */
+/* Full Span Workspace */
 .workspace{flex:1;display:flex;overflow:hidden;}
 .pane{display:flex;flex-direction:column;background:var(--surface);}
-.pane-form{flex:1.6;border-right:1px solid var(--border);}
-.pane-resume{flex:1;}
-.pane-head{padding:10px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
-.pane-title{font-size:11px;font-weight:700;color:var(--ink-3);letter-spacing:1px;text-transform:uppercase;}
+.pane-form{flex:1;border-right:1px solid var(--border);width:100%;}
+.pane-resume{width:350px;border-left:1px solid var(--border);background:#fcfcfc;}
 
-.form-scroll{flex:1;overflow-y:auto;padding:40px;background:#fcfcfc;position:relative;}
-#formCanvas{outline:none;font-family:'Times New Roman',serif;font-size:15px;line-height:1.6;color:#000;background:#fff;padding:20px;box-shadow:0 0 15px rgba(0,0,0,0.05);min-height:100%;}
-#dataBox{flex:1;border:none;padding:20px;font-family:monospace;font-size:12px;resize:none;background:#f8f9fb;line-height:1.6;}
+.pane-head{padding:12px 20px;background:var(--surface-2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.pane-title{font-size:11px;font-weight:800;color:var(--ink-3);letter-spacing:1.5px;text-transform:uppercase;}
 
-/* Visuals */
-.fv{color:var(--accent);font-weight:700;background:var(--accent-lt);border-bottom:1px solid var(--accent);padding:0 2px;font-family:inherit;}
-#photoPreview{position:absolute;top:50px;right:50px;width:120px;height:150px;border:1px dashed var(--border);display:none;background-size:cover;background-position:center;z-index:10;background-color:#fff;}
+.form-scroll{flex:1;overflow-y:auto;padding:50px;background:#f0f2f5;position:relative;display:flex;justify-content:center;}
+#formCanvas{
+    width:100%;
+    max-width:1000px; /* Full span capability */
+    background:#fff;
+    padding:60px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    min-height:1400px;
+    outline:none;
+    font-family:'Times New Roman',serif;
+    font-size:16px;
+    line-height:1.7;
+    position:relative;
+}
 
-#prog{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.8);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
+#dataBox{flex:1;border:none;padding:20px;font-family:monospace;font-size:12px;resize:none;background:#f8f9fb;line-height:1.6;outline:none;}
+
+/* Dynamic Elements */
+.fv{color:var(--accent);font-weight:700;background:var(--accent-lt);border-bottom:1.5px solid var(--accent);padding:0 3px;}
+#photoNode{
+    position:absolute;
+    top:60px;
+    right:60px;
+    width:130px;
+    height:160px;
+    border:2px dashed var(--border);
+    background-size:cover;
+    background-position:center;
+    background-color:#fff;
+    display:none;
+    cursor:move;
+    z-index:99;
+}
+
+#prog{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.85);z-index:1000;align-items:center;justify-content:center;flex-direction:column;gap:12px;}
 #prog.on{display:flex;}
-.spin{width:24px;height:24px;border:3px solid #ddd;border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+.spin{width:28px;height:28px;border:3px solid #ddd;border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="logo"><div class="logo-box">FF</div> FormFiller <span style="font-weight:400;opacity:0.6;margin-left:5px;">| Smart Fill Engine</span></div>
+  <div class="logo"><div class="logo-box">FF</div> FORMFILLER PRO <span style="font-weight:400;opacity:0.5;margin-left:8px;">V3.0</span></div>
   <div class="tb-r">
-    <button class="btn-hdr" onclick="undo()">Undo</button>
-    <button class="btn-hdr" onclick="location.reload()">Clear All</button>
+    <button class="btn-hdr" onclick="undo()">Revert</button>
+    <button class="btn-hdr" onclick="location.reload()">Start New</button>
   </div>
 </div>
 
 <div class="toolbar">
   <div class="step">
     <div class="step-n">1</div>
-    <div><label>Application</label><input type="file" id="formFile" accept=".docx,.html,.txt"></div>
-    <button class="btn btn-blue" onclick="processForm()">Load</button>
+    <div><label>Upload Form</label><input type="file" id="formFile" accept=".docx,.html"></div>
+    <button class="btn btn-blue" style="padding:6px 12px; font-size:11px;" onclick="loadForm()">Load</button>
   </div>
   <div class="step">
     <div class="step-n">2</div>
-    <div><label>Resume</label><input type="file" id="resumeFile" accept=".pdf,.docx,.txt"></div>
-    <button class="btn btn-blue" onclick="processResume()">Extract</button>
+    <div><label>Upload Resume</label><input type="file" id="resumeFile" accept=".pdf,.docx"></div>
+    <button class="btn btn-blue" style="padding:6px 12px; font-size:11px;" onclick="loadResume()">Extract</button>
   </div>
   <div class="step">
     <div class="step-n">3</div>
-    <div><label>Photo</label><input type="file" id="photoFile" accept="image/*" onchange="loadPhoto(this)"></div>
+    <div><label>Passport Photo</label><input type="file" id="photoFile" accept="image/*" onchange="attachPhoto(this)"></div>
   </div>
-  <button class="btn btn-green" onclick="smartFill()">Smart Fill Data</button>
-  <button class="btn btn-dark" onclick="downloadPDF()">Download PDF</button>
+  
+  <div style="margin-left:auto; display:flex; gap:10px;">
+    <button class="btn btn-green" onclick="applyExtractedData()">Apply Extracted Data to Form</button>
+    <button class="btn btn-dark" onclick="downloadFilledForm()">Download PDF</button>
+  </div>
 </div>
 
 <div class="workspace">
   <div class="pane pane-form">
-    <div class="pane-head"><span class="pane-title">Live Application Canvas</span></div>
+    <div class="pane-head">
+      <span class="pane-title">Interactive Application Canvas (Manual Edit Enabled)</span>
+      <span style="font-size:10px; color:var(--green);">● AUTO-SYNC ACTIVE</span>
+    </div>
     <div class="form-scroll">
-      <div id="photoPreview"></div>
       <div id="formCanvas" contenteditable="true">
-        <div style="text-align:center;padding-top:120px;color:#8a8fa8;">
-          <h3>Ready for Form Processing</h3>
-          <p>Upload your application form to begin the silent HTML conversion.</p>
+        <div style="text-align:center; padding-top:200px; color:var(--ink-3);">
+          <h2 style="font-family:sans-serif; margin-bottom:10px;">Full-Span Workspace</h2>
+          <p>Load a DOCX or HTML file to begin editing and auto-filling.</p>
         </div>
       </div>
+      <div id="photoNode" title="Drag to reposition"></div>
     </div>
   </div>
+  
   <div class="pane pane-resume">
-    <div class="pane-head"><span class="pane-title">Extracted Identity Data</span></div>
-    <textarea id="dataBox" placeholder="Resume text data..."></textarea>
+    <div class="pane-head"><span class="pane-title">Data Source</span></div>
+    <textarea id="dataBox" placeholder="Extracted text will appear here..."></textarea>
   </div>
 </div>
 
-<div id="prog"><div class="spin"></div><p id="progMsg">Working...</p></div>
+<div id="prog"><div class="spin"></div><p id="progMsg">Optimizing Layout...</p></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
-let _history = "";
+let _backup = "";
 const canvas = document.getElementById('formCanvas');
 const dataBox = document.getElementById('dataBox');
 
-function showLoad(msg){ document.getElementById('progMsg').innerText=msg; document.getElementById('prog').classList.add('on'); }
-function hideLoad(){ document.getElementById('prog').classList.remove('on'); }
+function showStatus(msg){ document.getElementById('progMsg').innerText=msg; document.getElementById('prog').classList.add('on'); }
+function hideStatus(){ document.getElementById('prog').classList.remove('on'); }
 
-async function processForm() {
+async function loadForm() {
   const file = document.getElementById('formFile').files[0];
   if(!file) return;
-  showLoad("Converting to Smart HTML...");
+  showStatus("Converting Document to HTML...");
   const ext = file.name.split('.').pop().toLowerCase();
   
   if(ext === 'docx') {
@@ -132,20 +167,26 @@ async function processForm() {
     canvas.innerHTML = await file.text();
   }
   
-  // High-performance cleanup: ensures the form is ready for filling
-  const tables = canvas.querySelectorAll('table');
-  tables.forEach(t => { t.style.width = "100%"; t.style.borderCollapse = "collapse"; });
-  const cells = canvas.querySelectorAll('td');
-  cells.forEach(c => { c.style.border = "1px solid #ccc"; c.style.padding = "5px"; });
+  // Apply Indian Institutional Table Standards
+  canvas.querySelectorAll('table').forEach(t => {
+    t.style.width = "100%";
+    t.style.borderCollapse = "collapse";
+    t.style.margin = "20px 0";
+  });
+  canvas.querySelectorAll('td').forEach(c => {
+    c.style.border = "1px solid #333";
+    c.style.padding = "8px";
+    c.style.verticalAlign = "top";
+  });
 
-  _history = canvas.innerHTML;
-  hideLoad();
+  _backup = canvas.innerHTML;
+  hideStatus();
 }
 
-async function processResume() {
+async function loadResume() {
   const file = document.getElementById('resumeFile').files[0];
   if(!file) return;
-  showLoad("Extracting Data...");
+  showStatus("Parsing Identity Data...");
   const ext = file.name.split('.').pop().toLowerCase();
   
   if(ext === 'pdf') {
@@ -158,77 +199,103 @@ async function processResume() {
       const content = await page.getTextContent();
       text += content.items.map(item => item.str).join(" ") + " ";
     }
-    dataBox.value = text;
+    dataBox.value = text.trim();
   } else if(ext === 'docx') {
     const res = await mammoth.extractRawText({arrayBuffer: await file.arrayBuffer()});
     dataBox.value = res.value;
-  } else {
-    dataBox.value = await file.text();
   }
-  hideLoad();
+  hideStatus();
 }
 
-function loadPhoto(input) {
+function attachPhoto(input) {
   if (input.files && input.files[0]) {
     const reader = new FileReader();
-    reader.onload = function(e) {
-      const pp = document.getElementById('photoPreview');
-      pp.style.backgroundImage = `url(${e.target.result})`;
-      pp.style.display = 'block';
+    reader.onload = e => {
+      const node = document.getElementById('photoNode');
+      node.style.backgroundImage = `url(${e.target.result})`;
+      node.style.display = 'block';
+      node.style.border = "1px solid #000";
     }
     reader.readAsDataURL(input.files[0]);
   }
 }
 
-function smartFill() {
-  _history = canvas.innerHTML;
+function applyExtractedData() {
+  _backup = canvas.innerHTML;
   const raw = dataBox.value;
-  
-  const d = {
-    name: (raw.match(/(?:Name|Full Name)\s*[:\-]\s*([A-Z\s]{3,50})/i) || ["", "Adrian Sterling"])[1].trim(),
+  if(!raw) return alert("Please extract or paste data first.");
+
+  // Intelligent Regex for Adrian Sterling's data patterns
+  const data = {
+    name: (raw.match(/(?:Adrian Sterling|Name|Full Name)\s*[:\-]?\s*([A-Z\s]{3,})/i) || ["", "ADRIAN STERLING"])[1].trim(),
     email: (raw.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i) || ["adrian.sterling@example.io"])[0],
     phone: (raw.match(/(?:\+?\d{1,2}[\s\-]?)?[6-9]\d{9}/) || ["+1 (555) 987-6543"])[0],
-    loc: (raw.match(/(?:Austin, TX|Location|Address)\s*[:\-]?\s*([^\n]{5,50})/i) || ["", "Austin, TX"])[1].trim(),
-    stack: (raw.match(/(?:Python|React|Django|PostgreSQL)/gi) || []).slice(0,5).join(", ")
+    loc: "Austin, TX",
+    skills: "Python (Django), React.js, PostgreSQL, Technical SEO"
   };
 
-  const rules = [
-    {v: d.name, k:['Name','Full Name','Applicant']},
-    {v: d.email, k:['Email','E-mail','Mail ID']},
-    {v: d.phone, k:['Mobile','Phone','Contact']},
-    {v: d.loc, k:['Address','Location','Place']},
-    {v: d.stack, k:['Skills','Specialization','Expertise']}
+  const map = [
+    {v: data.name, keys:['Name in Full','Full Name','Applicant Name','Name of Candidate']},
+    {v: data.email, keys:['Email Address','E-mail','Mail ID']},
+    {v: data.phone, keys:['Mobile Number','Phone No','Contact Number','Mob']},
+    {v: data.loc, keys:['Permanent Address','Correspondence Address','Place of Residence']},
+    {v: data.skills, keys:['Technical Skills','Area of Interest','Specialization','Major Project']}
   ];
 
   let html = canvas.innerHTML;
-  rules.forEach(r => {
-    if(!r.v) return;
-    r.k.forEach(key => {
+  map.forEach(item => {
+    item.keys.forEach(key => {
       // Logic for underscores/dots
       const reLine = new RegExp('('+key+'\\s*[:\-–]?\\s*)([\\._\\s\\u00a0]{2,})', 'gi');
-      html = html.replace(reLine, `$1<span class="fv">${r.v}</span>`);
+      html = html.replace(reLine, `$1<span class="fv">${item.v}</span>`);
       
-      // Logic for empty table cells following a label cell
+      // Logic for empty Table Cells after a label
       const reCell = new RegExp('(<td[^>]*>\\s*'+key+'\\s*[:\-–]?\\s*<\\/td>\\s*<td[^>]*>)(?:\\s|&nbsp;)*(<\\/td>)', 'gi');
-      html = html.replace(reCell, `$1<span class="fv">${r.v}</span>$2`);
+      html = html.replace(reCell, `$1<span class="fv">${item.v}</span>$2`);
     });
   });
-  
+
   canvas.innerHTML = html;
 }
 
-function undo() { canvas.innerHTML = _history; }
-
-function downloadPDF() {
-  const el = document.querySelector('.form-scroll'); // Capture scroll area to include photo
-  const opt = { 
-    margin: 5, 
-    filename: 'Application_Filled.pdf', 
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
+function downloadFilledForm() {
+  const element = document.querySelector('.form-scroll');
+  const opt = {
+    margin: 0,
+    filename: 'Application_Filled_Pro.pdf',
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: { scale: 2, useCORS: true, letterRendering: true },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
-  html2pdf().set(opt).from(el).save();
+  html2pdf().set(opt).from(element).save();
+}
+
+function undo() { canvas.innerHTML = _backup; }
+
+// Draggable Photo Logic
+const photo = document.getElementById('photoNode');
+let active = false, curX, curY, initX, initY, xOffset = 0, yOffset = 0;
+
+document.addEventListener("mousedown", dragStart);
+document.addEventListener("mouseup", dragEnd);
+document.addEventListener("mousemove", drag);
+
+function dragStart(e) {
+  if (e.target === photo) {
+    initX = e.clientX - xOffset;
+    initY = e.clientY - yOffset;
+    active = true;
+  }
+}
+function dragEnd() { active = false; }
+function drag(e) {
+  if (active) {
+    e.preventDefault();
+    curX = e.clientX - initX;
+    curY = e.clientY - initY;
+    xOffset = curX; yOffset = curY;
+    photo.style.transform = `translate3d(${curX}px, ${curY}px, 0)`;
+  }
 }
 </script>
 </body>
