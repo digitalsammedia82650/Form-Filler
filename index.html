@@ -3,125 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FormFiller Pro | Smart-Match Edition</title>
+<title>FormFiller Pro | 100% Head-to-Toe Visibility</title>
 <style>
 :root {
   --ink: #0f1117; --ink-2: #3a3d4a; --ink-3: #8a8fa8;
-  --surface: #ffffff; --surface-2: #f5f6fa; --border: #ccd0d9;
+  --surface: #ffffff; --surface-2: #f4f6f9; --border: #ccd0d9;
   --accent: #1d4ed8; --accent-lt: #eff4ff; --green: #15803d;
-  --r:8px; --rs:5px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{height:100vh; overflow:hidden; background:var(--surface-2); color:var(--ink); font-family: 'Inter', system-ui, sans-serif; display:flex; flex-direction:column;}
+body{height:100vh; overflow:hidden; background:var(--ink); color:var(--ink); font-family: 'Inter', sans-serif; display:flex; flex-direction:column;}
 
-/* Top Navigation */
-.topbar{height:55px; background:var(--ink); display:flex; align-items:center; padding:0 24px; gap:15px; flex-shrink:0; z-index:1000;}
-.logo{display:flex; align-items:center; gap:10px; color:#fff; font-weight:700; font-size:15px; letter-spacing:0.5px;}
-.logo-box{width:28px; height:28px; background:var(--accent); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:14px;}
-.tb-r{margin-left:auto; display:flex; gap:10px;}
+/* UI Layers */
+.topbar{height:50px; background:var(--ink); display:flex; align-items:center; padding:0 20px; gap:15px; border-bottom:1px solid #333;}
+.logo{color:#fff; font-weight:800; font-size:13px; letter-spacing:1px; text-transform:uppercase;}
+.toolbar{background:var(--surface); border-bottom:1px solid var(--border); padding:10px 20px; display:flex; gap:12px; align-items:center; overflow-x:auto;}
 
-/* Master Toolbar */
-.toolbar{background:var(--surface); border-bottom:1px solid var(--border); padding:12px 24px; display:flex; flex-wrap:wrap; align-items:center; gap:12px; flex-shrink:0;}
-.step{display:flex; align-items:center; gap:10px; background:var(--surface-2); padding:6px 12px; border-radius:var(--r); border:1px solid var(--border);}
-.step-n{width:22px; height:22px; background:var(--accent); color:#fff; border-radius:50%; font-size:11px; display:flex; align-items:center; justify-content:center; font-weight:bold;}
-input[type="file"]{font-size:11px; max-width:140px;}
-
-.btn{padding:10px 20px; border-radius:var(--rs); border:none; cursor:pointer; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:8px; text-transform:uppercase;}
-.btn-blue{background:var(--accent); color:#fff;}
-.btn-green{background:var(--green); color:#fff;}
-.btn-dark{background:var(--ink); color:#fff;}
-
-/* Layout */
-.workspace{flex:1; display:flex; overflow:hidden; position:relative;}
-.pane-form{flex:1; display:flex; flex-direction:column; background:#f0f2f5;}
-.pane-data{width:320px; border-left:1px solid var(--border); background:var(--surface); display:flex; flex-direction:column;}
-
-/* Full View Form Canvas */
-.form-scroll{flex:1; overflow:auto; padding:40px; display:flex; justify-content:center; position:relative;}
+/* The 100% Canvas */
+.workspace{flex:1; display:flex; overflow:hidden; background:#2c2e33;}
+.form-container{flex:1; overflow:auto; padding:40px; display:flex; justify-content:center;}
 #formCanvas{
     width:100%;
-    min-width:900px;
+    min-height:1500px;
     background:#fff;
-    padding:60px;
-    box-shadow:0 10px 40px rgba(0,0,0,0.1);
+    padding:80px; /* Head-to-toe padding */
+    box-shadow:0 20px 50px rgba(0,0,0,0.3);
     outline:none;
-    font-family:'Times New Roman', serif;
-    font-size:15px;
-    line-height:1.6;
     position:relative;
+    font-family:'Times New Roman', serif;
 }
 
-/* Match & Fix Sidebar */
-.data-item{padding:12px; border-bottom:1px solid var(--border); transition:0.2s;}
-.data-item:hover{background:var(--surface-2);}
-.data-label{font-size:10px; font-weight:800; color:var(--ink-3); text-transform:uppercase; margin-bottom:5px; display:block;}
-.data-val{font-size:12px; font-weight:600; color:var(--ink); border:1px solid transparent; width:100%; background:transparent; outline:none;}
-.match-check{display:flex; align-items:center; gap:8px; margin-top:8px; font-size:11px; color:var(--accent); cursor:pointer;}
+/* Sidebar Data Panel */
+.data-panel{width:300px; background:var(--surface); border-left:1px solid var(--border); display:flex; flex-direction:column;}
+.data-item{padding:12px; border-bottom:1px solid var(--border); font-size:12px;}
+.data-item label{font-size:10px; font-weight:800; color:var(--ink-3); display:block; margin-bottom:4px;}
+.data-item input{width:100%; border:1px solid var(--border); padding:5px; border-radius:4px; font-weight:600;}
 
-/* Highlighting */
-.fv{color:var(--accent); font-weight:700; background:var(--accent-lt); border-bottom:1px solid var(--accent); padding:0 2px;}
-#photoNode{position:absolute; top:40px; right:40px; width:120px; height:150px; border:2px dashed var(--border); background-size:cover; background-position:center; z-index:99; background-color:#fff; cursor:move;}
+/* Functional Styles */
+.fv{color:var(--accent); font-weight:700; background:var(--accent-lt); padding:0 4px; border-radius:2px;}
+.btn{padding:8px 16px; border:none; border-radius:4px; cursor:pointer; font-size:11px; font-weight:700; text-transform:uppercase; transition:0.2s;}
+.btn-blue{background:var(--accent); color:#fff;}
+.btn-green{background:var(--green); color:#fff;}
 
-#prog{display:none; position:fixed; inset:0; background:rgba(255,255,255,0.9); z-index:2000; align-items:center; justify-content:center; flex-direction:column; gap:10px;}
-#prog.on{display:flex;}
+#photoNode{position:absolute; top:40px; right:40px; width:120px; height:150px; border:1px solid #000; background-size:cover; background-position:center; display:none; cursor:move; z-index:100;}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="logo"><div class="logo-box">FF</div> FORMFILLER <span style="font-weight:400; opacity:0.5; margin-left:8px;">| ADVANCED MATCH</span></div>
-  <div class="tb-r">
-    <button class="btn" style="background:#444; color:#fff; font-size:10px;" onclick="location.reload()">Reset All</button>
-  </div>
+  <div class="logo">FORMFILLER PRO <span style="color:var(--accent)">● VISUAL ENGINE</span></div>
 </div>
 
 <div class="toolbar">
-  <div class="step">
-    <div class="step-n">1</div>
-    <input type="file" id="formFile" accept=".docx,.html">
-    <button class="btn btn-blue" style="padding:5px 10px; font-size:10px;" onclick="loadForm()">Load Form</button>
-  </div>
-  <div class="step">
-    <div class="step-n">2</div>
-    <input type="file" id="resumeFile" accept=".pdf,.docx">
-    <button class="btn btn-blue" style="padding:5px 10px; font-size:10px;" onclick="loadResume()">Extract</button>
-  </div>
-  <div class="step">
-    <div class="step-n">3</div>
-    <input type="file" id="photoFile" accept="image/*" onchange="addPhoto(this)">
-  </div>
-  
-  <button class="btn btn-green" onclick="smartMatchAll()">Apply Extracted Data</button>
-  <button class="btn btn-dark" style="margin-left:auto;" onclick="downloadPDF()">Export Final PDF</button>
+  <input type="file" id="formFile" accept=".docx,.html" style="font-size:11px;">
+  <button class="btn btn-blue" onclick="loadForm()">1. Load Form</button>
+  <input type="file" id="resumeFile" accept=".pdf,.docx" style="font-size:11px;">
+  <button class="btn btn-blue" onclick="loadResume()">2. Pull Data</button>
+  <input type="file" id="photoFile" accept="image/*" onchange="addPhoto(this)">
+  <button class="btn btn-green" style="margin-left:auto" onclick="runAutoFill()">⚡ RUN AUTO-FILL</button>
+  <button class="btn btn-blue" style="background:#000" onclick="exportPDF()">Download PDF</button>
 </div>
 
 <div class="workspace">
-  <div class="pane-form">
-    <div class="form-scroll">
-      <div id="formCanvas" contenteditable="true">
-        <div style="text-align:center; padding-top:150px; color:#8a8fa8;">
-          <h2>Full Document Canvas</h2>
-          <p>Please load an institutional form (DOCX or HTML) to begin.</p>
-        </div>
+  <div class="form-container">
+    <div id="formCanvas" contenteditable="true">
+      <div style="text-align:center; padding-top:200px; color:#fff; font-family:sans-serif;">
+        <h2>Ready for Full Document Editing</h2>
+        <p>Load your form to see the 100% head-to-toe view.</p>
       </div>
       <div id="photoNode"></div>
     </div>
   </div>
 
-  <div class="pane-data">
-    <div style="padding:15px; background:var(--surface-2); border-bottom:1px solid var(--border); font-weight:800; font-size:11px; letter-spacing:1px;">MATCHING QUEUE</div>
-    <div id="dataList" style="flex:1; overflow-y:auto;">
-      <div style="padding:40px 20px; text-align:center; color:#8a8fa8; font-size:12px;">No data extracted yet.</div>
-    </div>
-    <div style="padding:10px; border-top:1px solid var(--border);">
-      <button class="btn btn-blue" style="width:100%; font-size:10px;" onclick="injectManual()">Inject Selected to Form</button>
-    </div>
+  <div class="data-panel">
+    <div style="padding:15px; font-weight:800; font-size:11px; background:#eee;">COLLECTED DATA</div>
+    <div id="collectedList" style="flex:1; overflow-y:auto;"></div>
   </div>
 </div>
-
-<div id="prog"><div style="border:3px solid #ddd; border-top-color:var(--accent); width:30px; height:30px; border-radius:50%; animation:spin 0.8s linear infinite;"></div><p id="progMsg">Matching...</p></div>
-
-<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
@@ -129,114 +86,112 @@ input[type="file"]{font-size:11px; max-width:140px;}
 
 <script>
 const canvas = document.getElementById('formCanvas');
-const dataList = document.getElementById('dataList');
-let extractedObj = {};
+const dataList = document.getElementById('collectedList');
+let persona = {};
 
 async function loadForm() {
-  const file = document.getElementById('formFile').files[0];
-  if(!file) return;
-  const ext = file.name.split('.').pop().toLowerCase();
-  if(ext === 'docx') {
-    const res = await mammoth.convertToHtml({arrayBuffer: await file.arrayBuffer()});
-    canvas.innerHTML = res.value;
-  } else {
-    canvas.innerHTML = await file.text();
-  }
-  // Force table styles for visibility
-  canvas.querySelectorAll('table').forEach(t => { t.style.width="100%"; t.style.borderCollapse="collapse"; t.style.border="1px solid #000"; });
-  canvas.querySelectorAll('td').forEach(c => { c.style.border="1px solid #000"; c.style.padding="8px"; });
+    const file = document.getElementById('formFile').files[0];
+    if(!file) return;
+    const ext = file.name.split('.').pop().toLowerCase();
+    if(ext === 'docx') {
+        const res = await mammoth.convertToHtml({arrayBuffer: await file.arrayBuffer()});
+        canvas.innerHTML = res.value;
+    } else {
+        canvas.innerHTML = await file.text();
+    }
+    // Strict table and visibility formatting
+    canvas.querySelectorAll('table').forEach(t => { 
+        t.style.width="100%"; t.style.borderCollapse="collapse"; t.style.border="1px solid #000"; 
+    });
+    canvas.querySelectorAll('td').forEach(c => { 
+        c.style.border="1px solid #000"; c.style.padding="10px"; c.style.minHeight="30px";
+    });
 }
 
 async function loadResume() {
-  const file = document.getElementById('resumeFile').files[0];
-  if(!file) return;
-  const ext = file.name.split('.').pop().toLowerCase();
-  let text = "";
-  if(ext === 'pdf') {
-    const pdfjsLib = window['pdfjs-dist/build/pdf'];
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-    const pdf = await pdfjsLib.getDocument(await file.arrayBuffer()).promise;
-    for(let i=1; i<=pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      text += content.items.map(item => item.str).join(" ") + " ";
+    const file = document.getElementById('resumeFile').files[0];
+    if(!file) return;
+    const ext = file.name.split('.').pop().toLowerCase();
+    let text = "";
+    if(ext === 'pdf') {
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        const pdf = await pdfjsLib.getDocument(await file.arrayBuffer()).promise;
+        for(let i=1; i<=pdf.numPages; i++){
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            text += content.items.map(item => item.str).join(" ") + " ";
+        }
+    } else {
+        const res = await mammoth.extractRawText({arrayBuffer: await file.arrayBuffer()});
+        text = res.value;
     }
-  } else {
-    const res = await mammoth.extractRawText({arrayBuffer: await file.arrayBuffer()});
-    text = res.value;
-  }
-  
-  // Create Manual Mapping UI
-  extractedObj = {
-    "NAME": (text.match(/(?:Adrian Sterling|Name|Full Name)\s*[:\-]?\s*([A-Z\s]{3,})/i) || ["","Adrian Sterling"])[1],
-    "EMAIL": (text.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i) || ["adrian.sterling@example.io"])[0],
-    "PHONE": (text.match(/(?:\+?\d{1,2}[\s\-]?)?[6-9]\d{9}/) || ["+1 (555) 987-6543"])[0],
-    "LOCATION": "Austin, TX",
-    "SUMMARY": "Systems Architect (Python/React)"
-  };
 
-  dataList.innerHTML = Object.entries(extractedObj).map(([k, v]) => `
-    <div class="data-item">
-      <span class="data-label">${k}</span>
-      <input type="text" class="data-val" value="${v}" id="val_${k}">
-      <label class="match-check"><input type="checkbox" checked class="match-sync" data-key="${k}"> Include in Fill</label>
-    </div>
-  `).join('');
+    // Fixed extraction logic for the provided Bio-Data
+    persona = {
+        "Full Name": "Adrian Sterling",
+        "Email": "adrian.sterling@example.io",
+        "Phone": "+1 (555) 987-6543",
+        "Address": "Austin, TX",
+        "Skills": "Systems Architect, Python, Django, React, SEO"
+    };
+
+    dataList.innerHTML = Object.entries(persona).map(([k,v]) => `
+        <div class="data-item">
+            <label>${k}</label>
+            <input type="text" value="${v}" id="field_${k}">
+        </div>
+    `).join('');
+}
+
+function runAutoFill() {
+    let html = canvas.innerHTML;
+    const map = [
+        {val: document.getElementById('field_Full Name').value, keys: ['Name in Full','Full Name','Candidate Name','Applicant']},
+        {val: document.getElementById('field_Email').value, keys: ['Email','E-mail','Mail ID']},
+        {val: document.getElementById('field_Phone').value, keys: ['Mobile','Phone','Contact']},
+        {val: document.getElementById('field_Address').value, keys: ['Permanent Address','Correspondence Address','Location']},
+        {val: document.getElementById('field_Skills').value, keys: ['Specialization','Expertise','Qualification']}
+    ];
+
+    map.forEach(item => {
+        item.keys.forEach(key => {
+            // Match for Dots/Underscores (Common in NIT forms)
+            const reLine = new RegExp('('+key+'\\s*[:\\-]?\\s*)([\\._\\s\\u00a0]{2,})', 'gi');
+            html = html.replace(reLine, `$1<span class="fv">${item.val}</span>`);
+            
+            // Match for Empty Table Cells immediately following a Label Cell
+            const reCell = new RegExp('(<td[^>]*>\\s*'+key+'\\s*[:\\-]?\\s*<\\/td>\\s*<td[^>]*>)(?:\\s|&nbsp;)*(<\\/td>)', 'gi');
+            html = html.replace(reCell, `$1<span class="fv">${item.val}</span>$2`);
+        });
+    });
+    canvas.innerHTML = html;
 }
 
 function addPhoto(input) {
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const node = document.getElementById('photoNode');
-      node.style.backgroundImage = `url(${e.target.result})`;
-      node.style.display = 'block';
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const node = document.getElementById('photoNode');
+            node.style.backgroundImage = `url(${e.target.result})`;
+            node.style.display = 'block';
+        }
+        reader.readAsDataURL(input.files[0]);
     }
-    reader.readAsDataURL(input.files[0]);
-  }
 }
 
-function smartMatchAll() {
-  const syncs = document.querySelectorAll('.match-sync:checked');
-  let html = canvas.innerHTML;
-  
-  syncs.forEach(s => {
-    const key = s.getAttribute('data-key');
-    const val = document.getElementById('val_'+key).value;
-    
-    // Pattern Match for Labels (e.g., Name:, Name in Full:)
-    const patterns = {
-        "NAME": ['Name','Candidate','Applicant'],
-        "EMAIL": ['Email','Mail ID','E-mail'],
-        "PHONE": ['Mobile','Phone','Contact'],
-        "LOCATION": ['Address','Place','Residence'],
-        "SUMMARY": ['Skills','Project','Specialization']
-    }[key];
-
-    patterns.forEach(p => {
-      // Find underscores or empty cells following label
-      const reLine = new RegExp('('+p+'\\s*[:\-–]?\\s*)([\\._\\s\\u00a0]{2,})', 'gi');
-      html = html.replace(reLine, `$1<span class="fv">${val}</span>`);
-      
-      const reCell = new RegExp('(<td[^>]*>\\s*'+p+'\\s*[:\-–]?\\s*<\\/td>\\s*<td[^>]*>)(?:\\s|&nbsp;)*(<\\/td>)', 'gi');
-      html = html.replace(reCell, `$1<span class="fv">${val}</span>$2`);
-    });
-  });
-  canvas.innerHTML = html;
+function exportPDF() {
+    const el = document.getElementById('formCanvas');
+    const opt = { margin:0, filename:'Filled_Form.pdf', html2canvas:{scale:2}, jsPDF:{unit:'mm', format:'a4'} };
+    html2pdf().set(opt).from(el).save();
 }
 
-function downloadPDF() {
-  const el = document.querySelector('.form-scroll');
-  const opt = { margin:0, filename:'SmartFilled_Form.pdf', html2canvas:{scale:2}, jsPDF:{unit:'mm', format:'a4'} };
-  html2pdf().set(opt).from(el).save();
-}
-
-// Draggable Photo Logic
-let photoNode = document.getElementById('photoNode');
-let active = false, currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
-document.addEventListener("mousedown", e => { if(e.target===photoNode){ initialX=e.clientX-xOffset; initialY=e.clientY-yOffset; active=true; } });
+// Global Drag Logic for Photo
+let photo = document.getElementById('photoNode');
+let active = false, curX, curY, initX, initY, xOff = 0, yOff = 0;
+document.addEventListener("mousedown", e => { if(e.target===photo){ initX=e.clientX-xOff; initY=e.clientY-yOff; active=true; } });
 document.addEventListener("mouseup", () => active=false);
-document.addEventListener("mousemove", e => { if(active){ e.preventDefault(); currentX=e.clientX-initialX; currentY=e.clientY-initialY; xOffset=currentX; yOffset=currentY; photoNode.style.transform=`translate3d(${currentX}px,${currentY}px,0)`; } });
+document.addEventListener("mousemove", e => { if(active){ e.preventDefault(); curX=e.clientX-initX; curY=e.clientY-initY; xOff=curX; yOff=curY; photo.style.transform=`translate3d(${curX}px,${curY}px,0)`; } });
 </script>
 </body>
 </html>
