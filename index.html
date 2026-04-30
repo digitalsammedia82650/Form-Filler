@@ -3,23 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FormFiller Pro | Universal AI Engine</title>
+<title>FormFiller Pro | Universal Engine</title>
 
 <style>
 :root {
   --ink:#0f1117; --surface:#ffffff; --border:#ccd0d9;
-  --accent:#1d4ed8; --green:#15803d;
+  --accent:#1d4ed8;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{height:100vh;display:flex;flex-direction:column;background:var(--ink);font-family:Inter,sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column;background:var(--ink);font-family:Inter,sans-serif}
+
 .topbar{height:50px;background:#000;color:#fff;display:flex;align-items:center;padding:0 20px;font-weight:800}
-.toolbar{background:#fff;padding:10px;display:flex;gap:10px}
-.workspace{flex:1;display:flex}
-#formCanvas{flex:1;background:#fff;margin:20px;padding:60px;overflow:auto}
-.data-panel{width:300px;background:#fff;border-left:1px solid var(--border);overflow:auto}
+.toolbar{background:#fff;padding:10px;display:flex;gap:10px;flex-wrap:wrap}
+.workspace{flex:1;display:flex;overflow:hidden}
+
+.form-container{flex:1;overflow:auto;padding:30px;display:flex;justify-content:center}
+#formCanvas{
+  width:100%;
+  max-width:900px;
+  background:#fff;
+  padding:60px;
+  min-height:100%;
+  box-shadow:0 10px 40px rgba(0,0,0,0.3);
+  overflow:visible;
+}
+
+.data-panel{width:320px;background:#fff;border-left:1px solid var(--border);display:flex;flex-direction:column}
+.data-header{padding:10px;font-weight:700;border-bottom:1px solid var(--border)}
+.data-actions{padding:10px;border-bottom:1px solid var(--border);display:flex;gap:5px}
 .data-item{padding:10px;border-bottom:1px solid var(--border)}
-.fv{color:blue;font-weight:bold;background:#eef}
-.btn{padding:6px 12px;border:none;cursor:pointer}
+textarea{width:100%;height:150px;padding:8px;border:1px solid var(--border)}
+
+.btn{padding:6px 12px;border:none;cursor:pointer;background:#000;color:#fff;font-size:12px}
+
 </style>
 </head>
 
@@ -30,25 +46,46 @@ body{height:100vh;display:flex;flex-direction:column;background:var(--ink);font-
 <div class="toolbar">
 <input type="file" id="formFile">
 <button class="btn" onclick="loadForm()">Load Form</button>
+
 <input type="file" id="resumeFile">
-<button class="btn" onclick="loadResume()">Extract Data</button>
-<button class="btn" onclick="autoDetectAndFill()">⚡ Smart Fill</button>
-<button class="btn" onclick="exportPDF()">Export</button>
+<button class="btn" onclick="extractResume()">Extract Resume</button>
 </div>
 
 <div class="workspace">
-<div id="formCanvas" contenteditable="true">Drop your form here</div>
-<div class="data-panel" id="dataPanel"></div>
+
+<div class="form-container">
+<div id="formCanvas" contenteditable="true">
+<h2 style="text-align:center;margin-top:100px;color:#888">Full form will render here (no cut-off)</h2>
+</div>
+</div>
+
+<div class="data-panel">
+<div class="data-header">EXTRACTED DATA</div>
+
+<div class="data-actions">
+<button class="btn" onclick="copyAll()">Copy All</button>
+<button class="btn" onclick="copyImportant()">Copy Key Data</button>
+</div>
+
+<div class="data-item">
+<label>Full Extract</label>
+<textarea id="fullText"></textarea>
+</div>
+
+<div class="data-item">
+<label>Key Fields (Name, Email, Phone)</label>
+<textarea id="keyText"></textarea>
+</div>
+
+</div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
-let persona = {};
 const canvas = document.getElementById("formCanvas");
-const panel = document.getElementById("dataPanel");
 
 async function loadForm(){
  const file = document.getElementById("formFile").files[0];
@@ -60,14 +97,23 @@ async function loadForm(){
  } else {
   canvas.innerHTML = await file.text();
  }
+
+ // ensure full visibility
+ canvas.querySelectorAll('*').forEach(el=>{
+  el.style.maxWidth='100%';
+ });
 }
 
-async function loadResume(){
+async function extractResume(){
  const file = document.getElementById("resumeFile").files[0];
  if(!file) return;
  let text="";
  const ext=file.name.split('.').pop();
+
  if(ext==='pdf'){
+  const pdfjsLib = window['pdfjs-dist/build/pdf'];
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
   const pdf = await pdfjsLib.getDocument(await file.arrayBuffer()).promise;
   for(let i=1;i<=pdf.numPages;i++){
     const page=await pdf.getPage(i);
@@ -79,55 +125,27 @@ async function loadResume(){
   text = res.value;
  }
 
- persona = extractUniversal(text);
- renderPanel();
+ document.getElementById("fullText").value = text;
+
+ // key extraction
+ const email = text.match(/[\w.-]+@[\w.-]+\.[A-Za-z]{2,}/);
+ const phone = text.match(/(\+?\d{1,3}[\s-]?)?\d{10}/);
+ const name = text.match(/([A-Z][a-z]+\s[A-Z][a-z]+)/);
+
+ let keyData = `Name: ${name?name[0]:''}\nEmail: ${email?email[0]:''}\nPhone: ${phone?phone[0]:''}`;
+ document.getElementById("keyText").value = keyData;
 }
 
-function extractUniversal(text){
- let data={};
-
- const patterns = {
-  name: /(name|candidate|applicant)[:\-]?\s*([A-Z][a-z]+\s[A-Z][a-z]+)/i,
-  email: /([\w.-]+@[\w.-]+\.[A-Za-z]{2,})/,
-  phone: /(\+?\d{1,3}[\s-]?)?\d{10}/,
-  address: /(address|location)[:\-]?\s*(.+)/i,
-  skills: /(skills|expertise)[:\-]?\s*(.+)/i
- };
-
- for(let key in patterns){
-  let match = text.match(patterns[key]);
-  if(match) data[key]=match[2]||match[1];
- }
-
- return data;
+function copyAll(){
+ navigator.clipboard.writeText(document.getElementById("fullText").value);
+ alert("Full text copied");
 }
 
-function renderPanel(){
- panel.innerHTML="";
- for(let key in persona){
-  panel.innerHTML += `<div class="data-item"><b>${key}</b><br><input value="${persona[key]}" id="${key}"></div>`;
- }
+function copyImportant(){
+ navigator.clipboard.writeText(document.getElementById("keyText").value);
+ alert("Key data copied");
 }
 
-function autoDetectAndFill(){
- let html = canvas.innerHTML;
-
- Object.keys(persona).forEach(key=>{
-   let value = document.getElementById(key).value;
-
-   let regex = new RegExp(`(${key}|${key.replace(/\b\w/g,l=>l.toUpperCase())})\\s*[:\\-]?\\s*(\\.|_|\\s){2,}`,'gi');
-   html = html.replace(regex, `$1: <span class='fv'>${value}</span>`);
-
-   let tdRegex = new RegExp(`(<td[^>]*>${key}.*?<\\/td>\\s*<td[^>]*>)(.*?)(<\\/td>)`,'gi');
-   html = html.replace(tdRegex, `$1<span class='fv'>${value}</span>$3`);
- });
-
- canvas.innerHTML = html;
-}
-
-function exportPDF(){
- html2pdf().from(canvas).save();
-}
 </script>
 
 </body>
