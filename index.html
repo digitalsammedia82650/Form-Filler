@@ -3,81 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FormFiller Pro | Universal Engine</title>
+<title>FormFiller Pro | Visual Engine</title>
 
 <style>
 :root {
-  --ink:#0f1117; --surface:#ffffff; --border:#ccd0d9;
-  --accent:#1d4ed8;
+  --ink: #0f1117; --ink-2: #3a3d4a; --ink-3: #8a8fa8;
+  --surface: #ffffff; --surface-2: #f4f6f9; --border: #ccd0d9;
+  --accent: #1d4ed8; --accent-lt: #eff4ff; --green: #15803d;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;display:flex;flex-direction:column;background:var(--ink);font-family:Inter,sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{min-height:100vh; background:var(--ink); color:var(--ink); font-family:'Inter',sans-serif; display:flex; flex-direction:column;}
 
-.topbar{height:50px;background:#000;color:#fff;display:flex;align-items:center;padding:0 20px;font-weight:800}
-.toolbar{background:#fff;padding:10px;display:flex;gap:10px;flex-wrap:wrap}
-.workspace{flex:1;display:flex;overflow:hidden}
+/* UI Layers */
+.topbar{height:50px; background:var(--ink); display:flex; align-items:center; padding:0 20px; gap:15px; border-bottom:1px solid #333;}
+.logo{color:#fff; font-weight:800; font-size:13px; letter-spacing:1px; text-transform:uppercase;}
+.toolbar{background:var(--surface); border-bottom:1px solid var(--border); padding:10px 20px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;}
 
-.form-container{flex:1;overflow:auto;padding:30px;display:flex;justify-content:center}
+/* The Canvas (FIXED FULL VISIBILITY) */
+.workspace{flex:1; display:flex; overflow:hidden; background:#2c2e33;}
+.form-container{flex:1; overflow:auto; padding:40px; display:flex; justify-content:center;}
 #formCanvas{
-  width:100%;
-  max-width:900px;
-  background:#fff;
-  padding:60px;
-  min-height:100%;
-  box-shadow:0 10px 40px rgba(0,0,0,0.3);
-  overflow:visible;
+    width:100%;
+    max-width:900px;
+    min-height:100%;
+    background:#fff;
+    padding:80px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.3);
+    outline:none;
+    position:relative;
+    font-family:'Times New Roman',serif;
 }
 
-.data-panel{width:320px;background:#fff;border-left:1px solid var(--border);display:flex;flex-direction:column}
-.data-header{padding:10px;font-weight:700;border-bottom:1px solid var(--border)}
-.data-actions{padding:10px;border-bottom:1px solid var(--border);display:flex;gap:5px}
-.data-item{padding:10px;border-bottom:1px solid var(--border)}
-textarea{width:100%;height:150px;padding:8px;border:1px solid var(--border)}
+/* Sidebar */
+.data-panel{width:320px; background:var(--surface); border-left:1px solid var(--border); display:flex; flex-direction:column;}
+.data-header{padding:15px; font-weight:800; font-size:12px; background:#eee;}
+.data-actions{padding:10px; display:flex; gap:8px; border-bottom:1px solid var(--border);}
+.data-item{padding:12px; border-bottom:1px solid var(--border);} 
+.data-item label{font-size:10px; font-weight:800; color:var(--ink-3); display:block; margin-bottom:6px;}
+textarea{width:100%; height:140px; border:1px solid var(--border); padding:8px; border-radius:4px; font-size:12px;}
 
-.btn{padding:6px 12px;border:none;cursor:pointer;background:#000;color:#fff;font-size:12px}
+/* Buttons */
+.btn{padding:8px 14px; border:none; border-radius:4px; cursor:pointer; font-size:11px; font-weight:700; text-transform:uppercase;}
+.btn-blue{background:var(--accent); color:#fff;}
+.btn-green{background:var(--green); color:#fff;}
 
 </style>
 </head>
 
 <body>
 
-<div class="topbar">FORMFILLER PRO ● UNIVERSAL ENGINE</div>
+<div class="topbar">
+  <div class="logo">FORMFILLER PRO <span style="color:var(--accent)">● VISUAL ENGINE</span></div>
+</div>
 
 <div class="toolbar">
-<input type="file" id="formFile">
-<button class="btn" onclick="loadForm()">Load Form</button>
+  <input type="file" id="formFile" accept=".docx,.html">
+  <button class="btn btn-blue" onclick="loadForm()">Load Form</button>
 
-<input type="file" id="resumeFile">
-<button class="btn" onclick="extractResume()">Extract Resume</button>
+  <input type="file" id="resumeFile" accept=".pdf,.docx">
+  <button class="btn btn-blue" onclick="extractFull()">Extract Entire BioData</button>
+  <button class="btn btn-green" onclick="extractMain()">Extract Main (Name etc)</button>
 </div>
 
 <div class="workspace">
 
-<div class="form-container">
-<div id="formCanvas" contenteditable="true">
-<h2 style="text-align:center;margin-top:100px;color:#888">Full form will render here (no cut-off)</h2>
-</div>
-</div>
+  <div class="form-container">
+    <div id="formCanvas" contenteditable="true">
+      <div style="text-align:center; padding-top:200px; color:#888; font-family:sans-serif;">
+        <h2>Full Form View (No Cut-Off)</h2>
+        <p>Load your form to see complete document inside white canvas.</p>
+      </div>
+    </div>
+  </div>
 
-<div class="data-panel">
-<div class="data-header">EXTRACTED DATA</div>
+  <div class="data-panel">
+    <div class="data-header">EXTRACTED DATA</div>
 
-<div class="data-actions">
-<button class="btn" onclick="copyAll()">Copy All</button>
-<button class="btn" onclick="copyImportant()">Copy Key Data</button>
-</div>
+    <div class="data-actions">
+      <button class="btn btn-blue" onclick="copyFull()">Copy Full</button>
+      <button class="btn btn-green" onclick="copyMain()">Copy Main</button>
+    </div>
 
-<div class="data-item">
-<label>Full Extract</label>
-<textarea id="fullText"></textarea>
-</div>
+    <div class="data-item">
+      <label>Full BioData</label>
+      <textarea id="fullText"></textarea>
+    </div>
 
-<div class="data-item">
-<label>Key Fields (Name, Email, Phone)</label>
-<textarea id="keyText"></textarea>
-</div>
-
-</div>
+    <div class="data-item">
+      <label>Main Fields</label>
+      <textarea id="mainText"></textarea>
+    </div>
+  </div>
 
 </div>
 
@@ -85,67 +101,74 @@ textarea{width:100%;height:150px;padding:8px;border:1px solid var(--border)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
 
 <script>
-const canvas = document.getElementById("formCanvas");
+const canvas = document.getElementById('formCanvas');
+let fullData = "";
 
 async function loadForm(){
- const file = document.getElementById("formFile").files[0];
- if(!file) return;
- const ext = file.name.split('.').pop();
- if(ext==='docx'){
-  const res = await mammoth.convertToHtml({arrayBuffer:await file.arrayBuffer()});
-  canvas.innerHTML = res.value;
- } else {
-  canvas.innerHTML = await file.text();
- }
+  const file = document.getElementById('formFile').files[0];
+  if(!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
 
- // ensure full visibility
- canvas.querySelectorAll('*').forEach(el=>{
-  el.style.maxWidth='100%';
- });
-}
-
-async function extractResume(){
- const file = document.getElementById("resumeFile").files[0];
- if(!file) return;
- let text="";
- const ext=file.name.split('.').pop();
-
- if(ext==='pdf'){
-  const pdfjsLib = window['pdfjs-dist/build/pdf'];
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-
-  const pdf = await pdfjsLib.getDocument(await file.arrayBuffer()).promise;
-  for(let i=1;i<=pdf.numPages;i++){
-    const page=await pdf.getPage(i);
-    const content=await page.getTextContent();
-    text+=content.items.map(i=>i.str).join(" ");
+  if(ext==='docx'){
+    const res = await mammoth.convertToHtml({arrayBuffer: await file.arrayBuffer()});
+    canvas.innerHTML = res.value;
+  } else {
+    canvas.innerHTML = await file.text();
   }
- } else {
-  const res = await mammoth.extractRawText({arrayBuffer:await file.arrayBuffer()});
-  text = res.value;
- }
 
- document.getElementById("fullText").value = text;
-
- // key extraction
- const email = text.match(/[\w.-]+@[\w.-]+\.[A-Za-z]{2,}/);
- const phone = text.match(/(\+?\d{1,3}[\s-]?)?\d{10}/);
- const name = text.match(/([A-Z][a-z]+\s[A-Z][a-z]+)/);
-
- let keyData = `Name: ${name?name[0]:''}\nEmail: ${email?email[0]:''}\nPhone: ${phone?phone[0]:''}`;
- document.getElementById("keyText").value = keyData;
+  // ensure everything stays inside canvas
+  canvas.querySelectorAll('*').forEach(el=>{
+    el.style.maxWidth='100%';
+  });
 }
 
-function copyAll(){
- navigator.clipboard.writeText(document.getElementById("fullText").value);
- alert("Full text copied");
+async function extractFull(){
+  const file = document.getElementById('resumeFile').files[0];
+  if(!file) return;
+
+  let text="";
+  const ext=file.name.split('.').pop().toLowerCase();
+
+  if(ext==='pdf'){
+    const pdfjsLib = window['pdfjs-dist/build/pdf'];
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+    const pdf = await pdfjsLib.getDocument(await file.arrayBuffer()).promise;
+    for(let i=1;i<=pdf.numPages;i++){
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      text += content.items.map(i=>i.str).join(' ');
+    }
+  } else {
+    const res = await mammoth.extractRawText({arrayBuffer: await file.arrayBuffer()});
+    text = res.value;
+  }
+
+  fullData = text;
+  document.getElementById('fullText').value = text;
 }
 
-function copyImportant(){
- navigator.clipboard.writeText(document.getElementById("keyText").value);
- alert("Key data copied");
+function extractMain(){
+  if(!fullData) return alert('Extract full data first');
+
+  const email = fullData.match(/[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,}/);
+  const phone = fullData.match(/(\\+?\\d{1,3}[\\s-]?)?\\d{10}/);
+  const name = fullData.match(/([A-Z][a-z]+\\s[A-Z][a-z]+)/);
+
+  const result = `Name: ${name?name[0]:''}\nEmail: ${email?email[0]:''}\nPhone: ${phone?phone[0]:''}`;
+
+  document.getElementById('mainText').value = result;
 }
 
+function copyFull(){
+  navigator.clipboard.writeText(document.getElementById('fullText').value);
+  alert('Full data copied');
+}
+
+function copyMain(){
+  navigator.clipboard.writeText(document.getElementById('mainText').value);
+  alert('Main data copied');
+}
 </script>
 
 </body>
