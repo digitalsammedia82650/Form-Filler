@@ -3,81 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FormFiller Pro | 100% Head-to-Toe Visibility</title>
+<title>FormFiller Pro | Universal AI Engine</title>
+
 <style>
 :root {
-  --ink: #0f1117; --ink-2: #3a3d4a; --ink-3: #8a8fa8;
-  --surface: #ffffff; --surface-2: #f4f6f9; --border: #ccd0d9;
-  --accent: #1d4ed8; --accent-lt: #eff4ff; --green: #15803d;
+  --ink:#0f1117; --surface:#ffffff; --border:#ccd0d9;
+  --accent:#1d4ed8; --green:#15803d;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{height:100vh; overflow:hidden; background:var(--ink); color:var(--ink); font-family: 'Inter', sans-serif; display:flex; flex-direction:column;}
-
-/* UI Layers */
-.topbar{height:50px; background:var(--ink); display:flex; align-items:center; padding:0 20px; gap:15px; border-bottom:1px solid #333;}
-.logo{color:#fff; font-weight:800; font-size:13px; letter-spacing:1px; text-transform:uppercase;}
-.toolbar{background:var(--surface); border-bottom:1px solid var(--border); padding:10px 20px; display:flex; gap:12px; align-items:center; overflow-x:auto;}
-
-/* The 100% Canvas */
-.workspace{flex:1; display:flex; overflow:hidden; background:#2c2e33;}
-.form-container{flex:1; overflow:auto; padding:40px; display:flex; justify-content:center;}
-#formCanvas{
-    width:100%;
-    min-height:1500px;
-    background:#fff;
-    padding:80px; /* Head-to-toe padding */
-    box-shadow:0 20px 50px rgba(0,0,0,0.3);
-    outline:none;
-    position:relative;
-    font-family:'Times New Roman', serif;
-}
-
-/* Sidebar Data Panel */
-.data-panel{width:300px; background:var(--surface); border-left:1px solid var(--border); display:flex; flex-direction:column;}
-.data-item{padding:12px; border-bottom:1px solid var(--border); font-size:12px;}
-.data-item label{font-size:10px; font-weight:800; color:var(--ink-3); display:block; margin-bottom:4px;}
-.data-item input{width:100%; border:1px solid var(--border); padding:5px; border-radius:4px; font-weight:600;}
-
-/* Functional Styles */
-.fv{color:var(--accent); font-weight:700; background:var(--accent-lt); padding:0 4px; border-radius:2px;}
-.btn{padding:8px 16px; border:none; border-radius:4px; cursor:pointer; font-size:11px; font-weight:700; text-transform:uppercase; transition:0.2s;}
-.btn-blue{background:var(--accent); color:#fff;}
-.btn-green{background:var(--green); color:#fff;}
-
-#photoNode{position:absolute; top:40px; right:40px; width:120px; height:150px; border:1px solid #000; background-size:cover; background-position:center; display:none; cursor:move; z-index:100;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{height:100vh;display:flex;flex-direction:column;background:var(--ink);font-family:Inter,sans-serif}
+.topbar{height:50px;background:#000;color:#fff;display:flex;align-items:center;padding:0 20px;font-weight:800}
+.toolbar{background:#fff;padding:10px;display:flex;gap:10px}
+.workspace{flex:1;display:flex}
+#formCanvas{flex:1;background:#fff;margin:20px;padding:60px;overflow:auto}
+.data-panel{width:300px;background:#fff;border-left:1px solid var(--border);overflow:auto}
+.data-item{padding:10px;border-bottom:1px solid var(--border)}
+.fv{color:blue;font-weight:bold;background:#eef}
+.btn{padding:6px 12px;border:none;cursor:pointer}
 </style>
 </head>
+
 <body>
 
-<div class="topbar">
-  <div class="logo">FORMFILLER PRO <span style="color:var(--accent)">● VISUAL ENGINE</span></div>
-</div>
+<div class="topbar">FORMFILLER PRO ● UNIVERSAL ENGINE</div>
 
 <div class="toolbar">
-  <input type="file" id="formFile" accept=".docx,.html" style="font-size:11px;">
-  <button class="btn btn-blue" onclick="loadForm()">1. Load Form</button>
-  <input type="file" id="resumeFile" accept=".pdf,.docx" style="font-size:11px;">
-  <button class="btn btn-blue" onclick="loadResume()">2. Pull Data</button>
-  <input type="file" id="photoFile" accept="image/*" onchange="addPhoto(this)">
-  <button class="btn btn-green" style="margin-left:auto" onclick="runAutoFill()">⚡ RUN AUTO-FILL</button>
-  <button class="btn btn-blue" style="background:#000" onclick="exportPDF()">Download PDF</button>
+<input type="file" id="formFile">
+<button class="btn" onclick="loadForm()">Load Form</button>
+<input type="file" id="resumeFile">
+<button class="btn" onclick="loadResume()">Extract Data</button>
+<button class="btn" onclick="autoDetectAndFill()">⚡ Smart Fill</button>
+<button class="btn" onclick="exportPDF()">Export</button>
 </div>
 
 <div class="workspace">
-  <div class="form-container">
-    <div id="formCanvas" contenteditable="true">
-      <div style="text-align:center; padding-top:200px; color:#fff; font-family:sans-serif;">
-        <h2>Ready for Full Document Editing</h2>
-        <p>Load your form to see the 100% head-to-toe view.</p>
-      </div>
-      <div id="photoNode"></div>
-    </div>
-  </div>
-
-  <div class="data-panel">
-    <div style="padding:15px; font-weight:800; font-size:11px; background:#eee;">COLLECTED DATA</div>
-    <div id="collectedList" style="flex:1; overflow-y:auto;"></div>
-  </div>
+<div id="formCanvas" contenteditable="true">Drop your form here</div>
+<div class="data-panel" id="dataPanel"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
@@ -85,113 +46,89 @@ body{height:100vh; overflow:hidden; background:var(--ink); color:var(--ink); fon
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
-const canvas = document.getElementById('formCanvas');
-const dataList = document.getElementById('collectedList');
 let persona = {};
+const canvas = document.getElementById("formCanvas");
+const panel = document.getElementById("dataPanel");
 
-async function loadForm() {
-    const file = document.getElementById('formFile').files[0];
-    if(!file) return;
-    const ext = file.name.split('.').pop().toLowerCase();
-    if(ext === 'docx') {
-        const res = await mammoth.convertToHtml({arrayBuffer: await file.arrayBuffer()});
-        canvas.innerHTML = res.value;
-    } else {
-        canvas.innerHTML = await file.text();
-    }
-    // Strict table and visibility formatting
-    canvas.querySelectorAll('table').forEach(t => { 
-        t.style.width="100%"; t.style.borderCollapse="collapse"; t.style.border="1px solid #000"; 
-    });
-    canvas.querySelectorAll('td').forEach(c => { 
-        c.style.border="1px solid #000"; c.style.padding="10px"; c.style.minHeight="30px";
-    });
+async function loadForm(){
+ const file = document.getElementById("formFile").files[0];
+ if(!file) return;
+ const ext = file.name.split('.').pop();
+ if(ext==='docx'){
+  const res = await mammoth.convertToHtml({arrayBuffer:await file.arrayBuffer()});
+  canvas.innerHTML = res.value;
+ } else {
+  canvas.innerHTML = await file.text();
+ }
 }
 
-async function loadResume() {
-    const file = document.getElementById('resumeFile').files[0];
-    if(!file) return;
-    const ext = file.name.split('.').pop().toLowerCase();
-    let text = "";
-    if(ext === 'pdf') {
-        const pdfjsLib = window['pdfjs-dist/build/pdf'];
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
-        const pdf = await pdfjsLib.getDocument(await file.arrayBuffer()).promise;
-        for(let i=1; i<=pdf.numPages; i++){
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            text += content.items.map(item => item.str).join(" ") + " ";
-        }
-    } else {
-        const res = await mammoth.extractRawText({arrayBuffer: await file.arrayBuffer()});
-        text = res.value;
-    }
+async function loadResume(){
+ const file = document.getElementById("resumeFile").files[0];
+ if(!file) return;
+ let text="";
+ const ext=file.name.split('.').pop();
+ if(ext==='pdf'){
+  const pdf = await pdfjsLib.getDocument(await file.arrayBuffer()).promise;
+  for(let i=1;i<=pdf.numPages;i++){
+    const page=await pdf.getPage(i);
+    const content=await page.getTextContent();
+    text+=content.items.map(i=>i.str).join(" ");
+  }
+ } else {
+  const res = await mammoth.extractRawText({arrayBuffer:await file.arrayBuffer()});
+  text = res.value;
+ }
 
-    // Fixed extraction logic for the provided Bio-Data
-    persona = {
-        "Full Name": "Adrian Sterling",
-        "Email": "adrian.sterling@example.io",
-        "Phone": "+1 (555) 987-6543",
-        "Address": "Austin, TX",
-        "Skills": "Systems Architect, Python, Django, React, SEO"
-    };
-
-    dataList.innerHTML = Object.entries(persona).map(([k,v]) => `
-        <div class="data-item">
-            <label>${k}</label>
-            <input type="text" value="${v}" id="field_${k}">
-        </div>
-    `).join('');
+ persona = extractUniversal(text);
+ renderPanel();
 }
 
-function runAutoFill() {
-    let html = canvas.innerHTML;
-    const map = [
-        {val: document.getElementById('field_Full Name').value, keys: ['Name in Full','Full Name','Candidate Name','Applicant']},
-        {val: document.getElementById('field_Email').value, keys: ['Email','E-mail','Mail ID']},
-        {val: document.getElementById('field_Phone').value, keys: ['Mobile','Phone','Contact']},
-        {val: document.getElementById('field_Address').value, keys: ['Permanent Address','Correspondence Address','Location']},
-        {val: document.getElementById('field_Skills').value, keys: ['Specialization','Expertise','Qualification']}
-    ];
+function extractUniversal(text){
+ let data={};
 
-    map.forEach(item => {
-        item.keys.forEach(key => {
-            // Match for Dots/Underscores (Common in NIT forms)
-            const reLine = new RegExp('('+key+'\\s*[:\\-]?\\s*)([\\._\\s\\u00a0]{2,})', 'gi');
-            html = html.replace(reLine, `$1<span class="fv">${item.val}</span>`);
-            
-            // Match for Empty Table Cells immediately following a Label Cell
-            const reCell = new RegExp('(<td[^>]*>\\s*'+key+'\\s*[:\\-]?\\s*<\\/td>\\s*<td[^>]*>)(?:\\s|&nbsp;)*(<\\/td>)', 'gi');
-            html = html.replace(reCell, `$1<span class="fv">${item.val}</span>$2`);
-        });
-    });
-    canvas.innerHTML = html;
+ const patterns = {
+  name: /(name|candidate|applicant)[:\-]?\s*([A-Z][a-z]+\s[A-Z][a-z]+)/i,
+  email: /([\w.-]+@[\w.-]+\.[A-Za-z]{2,})/,
+  phone: /(\+?\d{1,3}[\s-]?)?\d{10}/,
+  address: /(address|location)[:\-]?\s*(.+)/i,
+  skills: /(skills|expertise)[:\-]?\s*(.+)/i
+ };
+
+ for(let key in patterns){
+  let match = text.match(patterns[key]);
+  if(match) data[key]=match[2]||match[1];
+ }
+
+ return data;
 }
 
-function addPhoto(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const node = document.getElementById('photoNode');
-            node.style.backgroundImage = `url(${e.target.result})`;
-            node.style.display = 'block';
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
+function renderPanel(){
+ panel.innerHTML="";
+ for(let key in persona){
+  panel.innerHTML += `<div class="data-item"><b>${key}</b><br><input value="${persona[key]}" id="${key}"></div>`;
+ }
 }
 
-function exportPDF() {
-    const el = document.getElementById('formCanvas');
-    const opt = { margin:0, filename:'Filled_Form.pdf', html2canvas:{scale:2}, jsPDF:{unit:'mm', format:'a4'} };
-    html2pdf().set(opt).from(el).save();
+function autoDetectAndFill(){
+ let html = canvas.innerHTML;
+
+ Object.keys(persona).forEach(key=>{
+   let value = document.getElementById(key).value;
+
+   let regex = new RegExp(`(${key}|${key.replace(/\b\w/g,l=>l.toUpperCase())})\\s*[:\\-]?\\s*(\\.|_|\\s){2,}`,'gi');
+   html = html.replace(regex, `$1: <span class='fv'>${value}</span>`);
+
+   let tdRegex = new RegExp(`(<td[^>]*>${key}.*?<\\/td>\\s*<td[^>]*>)(.*?)(<\\/td>)`,'gi');
+   html = html.replace(tdRegex, `$1<span class='fv'>${value}</span>$3`);
+ });
+
+ canvas.innerHTML = html;
 }
 
-// Global Drag Logic for Photo
-let photo = document.getElementById('photoNode');
-let active = false, curX, curY, initX, initY, xOff = 0, yOff = 0;
-document.addEventListener("mousedown", e => { if(e.target===photo){ initX=e.clientX-xOff; initY=e.clientY-yOff; active=true; } });
-document.addEventListener("mouseup", () => active=false);
-document.addEventListener("mousemove", e => { if(active){ e.preventDefault(); curX=e.clientX-initX; curY=e.clientY-initY; xOff=curX; yOff=curY; photo.style.transform=`translate3d(${curX}px,${curY}px,0)`; } });
+function exportPDF(){
+ html2pdf().from(canvas).save();
+}
 </script>
+
 </body>
 </html>
