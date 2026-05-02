@@ -24,198 +24,102 @@
   --green:    #166534;
   --greenlt:  #dcfce7;
   --amber:    #92400e;
-  --amberlt:  #fef3c7;
   --purple:   #5b21b6;
-  --purplt:   #f5f3ff;
-  --red:      #991b1b;
   --topbar:   52px;
-  --fmtbar:   36px;
   --r:        7px;
 }
 
-html,body { height:100%; width:100%; overflow:hidden;
-  font-family:'DM Sans',sans-serif; font-size:14px;
-  background:var(--bg); color:var(--ink); }
-
-.app { display:flex; flex-direction:column; height:100vh; width:100vw; }
+html,body { height:100%; width:100%; overflow:hidden; font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink); }
+.app { display:flex; flex-direction:column; height:100vh; }
 
 /* ── Topbar ── */
 .topbar {
-  height:var(--topbar); flex-shrink:0;
-  background:var(--surf); border-bottom:1px solid var(--b1);
-  display:flex; align-items:center;
-  padding:0 clamp(8px,2vw,20px); gap:clamp(5px,1vw,10px);
-  overflow-x:auto; overflow-y:hidden; z-index:200;
+  height:var(--topbar); flex-shrink:0; background:var(--surf); border-bottom:1px solid var(--b1);
+  display:flex; align-items:center; padding:0 20px; gap:10px;
 }
-.topbar::-webkit-scrollbar{display:none;}
-
-.brand { font-size:clamp(12px,1.3vw,15px); font-weight:600;
-  letter-spacing:-0.4px; white-space:nowrap; flex-shrink:0; }
+.brand { font-size:15px; font-weight:600; letter-spacing:-0.4px; }
 .brand em { color:var(--accent); font-style:normal; }
-.tbdiv { width:1px; height:20px; background:var(--b1); flex-shrink:0; }
 
 .ubtn {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:5px clamp(8px,1.2vw,13px); border-radius:var(--r);
-  font-size:clamp(11px,1vw,13px); font-weight:500; cursor:pointer;
-  white-space:nowrap; flex-shrink:0; font-family:'DM Sans',sans-serif;
-  transition:background .12s, border-color .12s;
+  padding:6px 14px; border-radius:var(--r); font-size:12px; font-weight:500; cursor:pointer;
+  border:1px solid var(--b2); background:var(--surf); transition: all .1s;
 }
-.ubtn svg { width:12px; height:12px; flex-shrink:0; }
-.uf  { border:1px solid var(--b2);  background:var(--surf); color:var(--ink); }
-.ur  { border:1px solid #93c5fd; background:#eff6ff; color:#1e40af; }
-.up  { border:1px solid #c4b5fd; background:var(--purplt); color:var(--purple); }
-.uf:hover { background:var(--bg); }
-.ur:hover { background:#dbeafe; }
-.up:hover { background:#ede9fe; }
+.ubtn.ur { border-color:#93c5fd; background:#eff6ff; color:#1e40af; }
+.ubtn.up { border-color:#c4b5fd; background:#f5f3ff; color:var(--purple); }
 .ubtn.done { border-color:var(--green)!important; background:var(--greenlt)!important; color:var(--green)!important; }
 
 .xbtn {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:5px clamp(10px,1.4vw,16px); border-radius:var(--r);
-  font-size:clamp(11px,1vw,13px); font-weight:600; cursor:pointer;
-  white-space:nowrap; flex-shrink:0; font-family:'DM Sans',sans-serif;
-  border:1px solid var(--accent); background:var(--accent); color:#fff;
-  transition:background .12s; margin-left:auto;
-}
-.xbtn:hover { background:#1643b0; }
-
-/* ── Format bar ── */
-.fmtbar {
-  height:var(--fmtbar); flex-shrink:0;
-  background:var(--surf); border-bottom:1px solid var(--b1);
-  display:flex; align-items:center;
-  padding:0 clamp(6px,1.5vw,16px); gap:2px;
-  overflow-x:auto; overflow-y:hidden;
-}
-.fmtbar::-webkit-scrollbar{display:none;}
-.fbtn {
-  padding:3px 7px; border-radius:5px; border:none;
-  background:transparent; color:var(--ink2); font-size:12px;
-  font-family:'DM Sans',sans-serif; font-weight:500;
-  cursor:pointer; transition:background .1s; white-space:nowrap; flex-shrink:0;
-}
-.fbtn:hover { background:var(--bg); color:var(--ink); }
-.fdiv { width:1px; height:16px; background:var(--b1); margin:0 3px; flex-shrink:0; }
-.fsel {
-  font-size:11px; border:1px solid var(--b1); background:var(--surf);
-  border-radius:5px; padding:2px 5px; color:var(--ink2);
-  cursor:pointer; font-family:'DM Sans',sans-serif; flex-shrink:0;
+  margin-left:auto; padding:6px 16px; border-radius:var(--r); font-size:12px; font-weight:600;
+  background:var(--accent); color:#fff; border:none; cursor:pointer;
 }
 
 /* ── Workspace ── */
-.workspace { flex:1; display:flex; overflow:hidden; min-height:0; }
+.workspace { flex:1; display:flex; overflow:hidden; }
+.doc-panel { flex:1; overflow-y:auto; padding:40px; display:flex; flex-direction:column; align-items:center; }
+.paper-wrap { width:100%; max-width:840px; display:none; }
+#docFrame { width:100%; border:none; box-shadow:0 10px 30px rgba(0,0,0,0.1); background:#fff; border-radius:4px; }
 
-.doc-panel {
-  flex:1; min-width:0; overflow-y:auto; overflow-x:hidden;
-  background:var(--bg);
-  padding:clamp(14px,3vw,36px) clamp(10px,2.5vw,28px);
-  display:flex; flex-direction:column; align-items:center;
-}
+.resizer { width:4px; cursor:col-resize; background:var(--b1); transition: background .2s; }
+.resizer:hover { background:var(--accent); }
 
-.empty-paper {
-  width:100%; max-width:840px; min-height:480px; background:#fff;
-  box-shadow:0 2px 8px rgba(0,0,0,0.07),0 8px 28px rgba(0,0,0,0.05);
-  border-radius:3px; display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  gap:14px; text-align:center; padding:60px 40px;
-}
-.empty-paper h3 { font-size:16px; font-weight:600; color:var(--ink2); }
-.ep-btn  {
-  margin-top:6px; display:inline-flex; align-items:center; gap:6px;
-  padding:7px 16px; border-radius:var(--r);
-  border:1px solid var(--accent); background:var(--aclt); color:var(--accent);
-  font-size:13px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif;
-}
+/* ── Sidebar & Cards ── */
+.sidebar { width:320px; background:var(--surf); border-left:1px solid var(--b1); display:flex; flex-direction:column; }
+.sbar-hd { padding:12px; border-bottom:1px solid var(--b1); display:flex; justify-content:space-between; align-items:center; }
+.sbar-body { flex:1; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:8px; }
 
-.paper-wrap { width:100%; max-width:840px; flex-shrink:0; display:none; }
-#docFrame {
-  width:100%; min-height:1060px; border:none; display:block;
-  box-shadow:0 2px 8px rgba(0,0,0,0.07),0 10px 36px rgba(0,0,0,0.06);
-  border-radius:3px; background:#fff;
-}
-
-.resizer { width:5px; flex-shrink:0; cursor:col-resize; background:var(--b1); z-index:10; }
-.resizer:hover, .resizer.active { background:var(--accent); }
-
-/* ── Sidebar ── */
-.sidebar {
-  width:clamp(260px,28vw,400px); flex-shrink:0;
-  background:var(--surf); border-left:1px solid var(--b1);
-  display:flex; flex-direction:column; min-height:0;
-}
-.sbar-hd { padding:10px 13px; border-bottom:1px solid var(--b1); display:flex; align-items:center; justify-content:space-between; }
-.sbar-title { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; color:var(--ink2); }
-.cnt { font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; background:var(--aclt); color:var(--accent); }
-.sbar-body { flex:1; overflow-y:auto; padding:9px; display:flex; flex-direction:column; gap:5px; }
-
-.sec { display:flex; align-items:center; gap:7px; padding:7px 2px 3px; }
-.sec-ln { flex:1; height:1px; background:var(--b1); }
-.sec-lbl { font-size:9px; font-weight:700; text-transform:uppercase; font-family:'DM Mono',monospace; }
-.sec-lbl.s-matched { color:var(--accent); }
+.sec-lbl { font-size:9px; font-weight:700; text-transform:uppercase; color:var(--ink3); margin:10px 0 4px; font-family:'DM Mono',monospace; }
 
 .ecard {
-  border:1px solid var(--b1); border-radius:var(--r);
-  padding:8px 10px; background:var(--surf); cursor:pointer;
+  border:1px solid var(--b1); border-radius:var(--r); padding:10px; background:#fff; cursor:pointer;
+  transition: transform 0.1s, border-color 0.1s;
 }
-.ecard:hover { border-color:var(--accent); background:var(--aclt); }
+.ecard:hover { border-color:var(--accent); transform: translateY(-1px); }
 .ecard.copied { border-color:var(--green); background:var(--greenlt); }
 
-.etype { font-size:9px; font-weight:700; text-transform:uppercase; margin-bottom:2px; font-family:'DM Mono',monospace; }
-.elbl { font-size:9.5px; color:var(--ink3); margin-bottom:2px; }
-.ev   { font-size:12px; color:var(--ink); line-height:1.4; word-break:break-word; }
+.etype { font-size:8px; font-weight:800; text-transform:uppercase; margin-bottom:4px; font-family:'DM Mono',monospace; }
+.t-match { color:var(--accent); } .t-high { color:var(--green); } .t-low { color:var(--ink3); }
 
-#toast {
-  position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
-  background:var(--ink); color:#fff; padding:7px 18px; border-radius:999px;
-  font-size:12px; font-weight:500; display:none; z-index:9999;
-}
-#toast.ok { background:var(--green); }
-#toast.err { background:var(--red); }
+.ev { font-size:12px; font-weight:500; margin-bottom:6px; word-break:break-all; }
 
+/* Progress Bar */
+.ebar-track { height:3px; background:var(--bg); border-radius:2px; overflow:hidden; margin-top:4px; }
+.ebar-fill { height:100%; transition: width 0.3s; }
+.b-blue { background:var(--accent); } .b-green { background:var(--green); } .b-gray { background:var(--b2); }
+.epct { font-size:8px; color:var(--ink3); margin-top:3px; font-family:'DM Mono',monospace; }
+
+#toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; padding:8px 16px; border-radius:20px; font-size:12px; display:none; z-index:1000; }
 input[type="file"] { display:none; }
 </style>
 </head>
 <body>
-<div class="app">
 
-  <!-- Topbar -->
+<div class="app">
   <div class="topbar">
     <span class="brand">Form<em>Filler</em> Pro</span>
-    <div class="tbdiv"></div>
-    <button class="ubtn uf" id="btnForm" onclick="document.getElementById('fIn').click()">Choose Form</button>
-    <button class="ubtn ur" id="btnResume" onclick="document.getElementById('rIn').click()">Choose Resume</button>
-    <button class="ubtn up" id="btnPhoto" onclick="document.getElementById('pIn').click()">Photo</button>
-    <div class="tbdiv"></div>
+    <button class="ubtn" id="btnF" onclick="document.getElementById('fIn').click()">Choose Form</button>
+    <button class="ubtn ur" id="btnR" onclick="document.getElementById('rIn').click()">Choose Resume</button>
+    <button class="ubtn up" id="btnP" onclick="document.getElementById('pIn').click()">Photo</button>
     <button class="xbtn" onclick="exportPDF()">Export PDF</button>
   </div>
 
-  <!-- Format bar -->
-  <div class="fmtbar">
-    <button class="fbtn" onclick="fmt('bold')"><b>B</b></button>
-    <button class="fbtn" onclick="fmt('italic')"><i>I</i></button>
-    <button class="fbtn" onclick="fmt('underline')"><u>U</u></button>
-    <div class="fdiv"></div>
-    <button class="fbtn" onclick="fmt('justifyLeft')">L</button>
-    <button class="fbtn" onclick="fmt('justifyCenter')">C</button>
-    <button class="fbtn" onclick="fmt('justifyRight')">R</button>
-  </div>
-
-  <!-- Workspace -->
   <div class="workspace">
-    <div class="doc-panel" id="docPanel">
-      <div class="empty-paper" id="emptyPaper">
-        <h3>No form loaded</h3>
-        <p>Upload a .docx form to begin automated extraction.</p>
-        <button class="ep-btn" onclick="document.getElementById('fIn').click()">Choose Form (.docx)</button>
+    <div class="doc-panel">
+      <div id="empty" style="text-align:center; margin-top:100px;">
+        <h3 style="color:var(--ink2)">No Document Loaded</h3>
+        <p style="color:var(--ink3); font-size:13px;">Upload a .docx form to start.</p>
       </div>
       <div class="paper-wrap" id="paperWrap">
         <iframe id="docFrame"></iframe>
       </div>
     </div>
+
     <div class="resizer" id="resizer"></div>
-    <div class="sidebar" id="sidebar">
-      <div class="sbar-hd"><span class="sbar-title">Extracted Data</span><span class="cnt" id="cntBadge">—</span></div>
+
+    <div class="sidebar">
+      <div class="sbar-hd">
+        <span style="font-size:11px; font-weight:700;">EXTRACTED DATA</span>
+        <span class="cnt" id="cntBadge">0</span>
+      </div>
       <div class="sbar-body" id="sbarBody"></div>
     </div>
   </div>
@@ -227,136 +131,204 @@ input[type="file"] { display:none; }
 <input type="file" id="pIn" accept="image/*" onchange="loadPhoto()">
 
 <script>
-let resumeText='', formText='', formHtml='', formLoaded=false, photoSrc=null;
+let resumeText='', formText='', formHtml='', photoSrc=null;
 
-function notify(msg,type=''){
+/* ═══ UTILS ═══ */
+function notify(msg) {
   const t=document.getElementById('toast');
-  t.textContent=msg; t.className=type; t.style.display='block';
-  setTimeout(()=>t.style.display='none',3000);
+  t.textContent=msg; t.style.display='block';
+  setTimeout(()=>t.style.display='none',2500);
+}
+
+function escRx(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+
+function matchScore(candidate, ftxt) {
+  if(!candidate || candidate.length < 3) return 0;
+  const words = candidate.toLowerCase().split(/\W+/).filter(w => w.length > 2);
+  if(!words.length) return 0;
+  const fl = ftxt.toLowerCase();
+  const hits = words.filter(w => fl.includes(w)).length;
+  return Math.round((hits / words.length) * 100);
+}
+
+function getTrace(v) {
+  return v.toUpperCase().replace(/[^A-Z]/g,'').substring(0,3).split('').map(c=>c.charCodeAt(0)).join('.');
 }
 
 /* ═══ IFRAME WRITER ═══ */
 function writeFrame(html) {
   const frame = document.getElementById('docFrame');
-  const doc = frame.contentDocument || frame.contentWindow.document;
-  const shell = `<!DOCTYPE html><html><head><style>
-    body{margin:0;padding:0;background:#fff;font-family:'Times New Roman',serif;font-size:12pt;line-height:1.5;}
-    .pb{padding:60px 80px; min-height:1040px; position:relative; outline:none;}
-    .pb:focus { box-shadow: inset 0 0 10px #f0f4ff; }
+  const doc = frame.contentDocument;
+  const shell = `<html><head><style>
+    body{margin:0;padding:60px 80px;font-family:serif;font-size:12pt;line-height:1.6;color:#333;}
+    .pb{min-height:1000px; outline:none; position:relative;}
     table{border-collapse:collapse;width:100%;margin:10px 0;}
-    td,th{border:1px solid #888;padding:5px;vertical-align:top;}
-    .mf{border-bottom:2px solid #1a56db;color:#1a56db;font-weight:700;background:rgba(26,86,219,.07);cursor:pointer;user-select:all;}
-    #photoEl{position:absolute;width:120px;height:150px;top:50px;right:50px;border:1px dashed #ccc;display:none;cursor:move;background-size:cover;}
-    #photoEl.on{display:block;border-style:solid;}
+    td,th{border:1px solid #999;padding:6px;}
+    .mf{background:rgba(26,86,219,0.08); border-bottom:2px solid #1a56db; color:#1a56db; font-weight:bold; cursor:pointer;}
+    #photoEl{position:absolute;width:120px;height:150px;top:0;right:0;border:1px dashed #ccc;display:none;background-size:cover;cursor:move;}
   </style></head><body>
   <div class="pb" id="pb" contenteditable="true" spellcheck="false">
     <div id="photoEl" contenteditable="false"></div>
     ${html}
   </div>
   <script>
-    const pb = document.getElementById('pb');
-    function sh(){ parent.postMessage({t:'h', v:document.body.scrollHeight}, '*'); }
+    const pb=document.getElementById('pb');
+    function sh(){ parent.postMessage({t:'h',v:document.body.scrollHeight},'*'); }
     new ResizeObserver(sh).observe(pb);
-    pb.addEventListener('input', sh);
-    
-    var p=document.getElementById('photoEl');
-    p.onmousedown=function(e){
-      e.preventDefault();
-      var ox=e.clientX-p.offsetLeft, oy=e.clientY-p.offsetTop;
-      document.onmousemove=function(ev){p.style.left=(ev.clientX-ox)+'px'; p.style.top=(ev.clientY-oy)+'px';};
-      document.onmouseup=function(){document.onmousemove=null;};
-    };
-
-    document.addEventListener('click', function(e){
-      if(e.target.classList.contains('mf')){
-        navigator.clipboard.writeText(e.target.textContent.trim());
-        parent.postMessage({t:'cp', v:e.target.textContent}, '*');
-      }
+    pb.addEventListener('click', e => {
+      if(e.target.classList.contains('mf')) parent.postMessage({t:'cp',v:e.target.innerText},'*');
     });
+    const p=document.getElementById('photoEl');
+    p.onmousedown=e=>{
+      let ox=e.clientX-p.offsetLeft, oy=e.clientY-p.offsetTop;
+      document.onmousemove=ev=>{p.style.left=(ev.clientX-ox)+'px';p.style.top=(ev.clientY-oy)+'px';};
+      document.onmouseup=()=>{document.onmousemove=null;};
+    };
   <\/script></body></html>`;
   doc.open(); doc.write(shell); doc.close();
 }
 
-window.addEventListener('message', e => {
-  if(e.data.t==='h') document.getElementById('docFrame').style.height = (e.data.v+50)+'px';
-  if(e.data.t==='cp') notify('Copied: ' + e.data.v, 'ok');
-});
+window.onmessage = e => {
+  if(e.data.t==='h') document.getElementById('docFrame').style.height = e.data.v + 'px';
+  if(e.data.t==='cp') { navigator.clipboard.writeText(e.data.v); notify('Copied to clipboard'); }
+};
 
-function fmt(cmd,val=null){
-  const f=document.getElementById('docFrame');
-  f.contentDocument.execCommand(cmd,false,val);
-}
-
+/* ═══ LOADERS ═══ */
 async function loadForm(){
-  const file = document.getElementById('fIn').files[0];
-  const ab = await file.arrayBuffer();
+  const f = document.getElementById('fIn').files[0];
+  const ab = await f.arrayBuffer();
   const raw = await mammoth.extractRawText({arrayBuffer:ab});
   formText = raw.value;
-  const res = await mammoth.convertToHtml({arrayBuffer:ab});
-  formHtml = res.value;
+  const html = await mammoth.convertToHtml({arrayBuffer:ab});
+  formHtml = html.value;
   writeFrame(formHtml);
-  formLoaded=true;
-  document.getElementById('emptyPaper').style.display='none';
+  document.getElementById('empty').style.display='none';
   document.getElementById('paperWrap').style.display='block';
-  document.getElementById('btnForm').classList.add('done');
+  document.getElementById('btnF').classList.add('done');
   if(resumeText) runExtraction();
 }
 
 async function loadResume(){
-  const file = document.getElementById('rIn').files[0];
-  const ab = await file.arrayBuffer();
+  const f = document.getElementById('rIn').files[0];
+  const ab = await f.arrayBuffer();
   const raw = await mammoth.extractRawText({arrayBuffer:ab});
   resumeText = raw.value;
-  document.getElementById('btnResume').classList.add('done');
-  if(formLoaded) runExtraction();
+  document.getElementById('btnR').classList.add('done');
+  if(formText) runExtraction();
 }
 
 function loadPhoto(){
-  const file = document.getElementById('pIn').files[0];
-  const reader = new FileReader();
-  reader.onload = e => {
-    photoSrc = e.target.result;
-    const f = document.getElementById('docFrame').contentDocument.getElementById('photoEl');
-    f.style.backgroundImage = `url(${photoSrc})`;
-    f.classList.add('on');
-    document.getElementById('btnPhoto').classList.add('done');
+  const f = document.getElementById('pIn').files[0];
+  const rd = new FileReader();
+  rd.onload = e => {
+    const el = document.getElementById('docFrame').contentDocument.getElementById('photoEl');
+    el.style.backgroundImage = `url(${e.target.result})`;
+    el.style.display = 'block';
+    document.getElementById('btnP').classList.add('done');
   };
-  reader.readAsDataURL(file);
+  rd.readAsDataURL(f);
 }
 
-function runExtraction(){
+/* ═══ THE EXTRACTION ENGINE ═══ */
+function runExtraction() {
   const body = document.getElementById('sbarBody');
   body.innerHTML = '';
-  // Basic Regex Logic
+  const used = new Set();
+  const buckets = { matched: [], high: [], low: [] };
+
+  // 1. Identify Field Labels in the Form (e.g., "Full Name:", "Address:")
+  const labels = [];
+  const rx = /([A-Z][A-Za-z\s]{2,25}):/g;
+  let m; while(m = rx.exec(formText)) labels.push(m[1].trim());
+
+  // 2. Scan Resume for direct Label matches
+  labels.forEach(l => {
+    const reg = new RegExp(escRx(l) + '[\\s:]+([^\\n]{2,50})', 'i');
+    const match = resumeText.match(reg);
+    if(match && !used.has(match[1].trim())) {
+      const val = match[1].trim();
+      buckets.matched.push({ label: l, value: val, score: 100 });
+      used.add(val);
+    }
+  });
+
+  // 3. Extract common patterns (Emails, Phones)
   const email = (resumeText.match(/[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/g) || [])[0];
   const phone = (resumeText.match(/(?:\+?1[\s-.]?)?\(?\d{3}\)?[\s-.]?\d{3}[\s-.]?\d{4}/g) || [])[0];
   
-  const items = [];
-  if(email) items.push({label:'Email', value:email});
-  if(phone) items.push({label:'Phone', value:phone});
-
-  items.forEach(item => {
-    const el = document.createElement('div');
-    el.className = 'ecard';
-    el.innerHTML = `<div class="etype">MATCH</div><div class="elbl">${item.label}</div><div class="ev">${item.value}</div>`;
-    el.onclick = () => { navigator.clipboard.writeText(item.value); notify('Copied','ok'); };
-    body.appendChild(el);
+  [email, phone].forEach(v => {
+    if(v && !used.has(v)) {
+      const sc = matchScore(v, formText);
+      if(sc > 20) buckets.high.push({ label: 'Contact', value: v, score: sc });
+      else buckets.low.push({ label: 'Contact', value: v, score: sc });
+      used.add(v);
+    }
   });
-  document.getElementById('cntBadge').textContent = items.length;
+
+  // 4. Chunk remaining resume lines and score them
+  resumeText.split('\n').forEach(line => {
+    const l = line.trim();
+    if(l.length < 5 || used.has(l)) return;
+    const sc = matchScore(l, formText);
+    if(sc > 30) buckets.high.push({ label: 'Relevant Info', value: l, score: sc });
+    else if(sc > 5) buckets.low.push({ label: 'Data Point', value: l, score: sc });
+  });
+
+  // Render Sidebar
+  renderBucket(body, 'Direct Matches', buckets.matched, 't-match', 'b-blue');
+  renderBucket(body, 'High Relevance', buckets.high, 't-high', 'b-green');
+  renderBucket(body, 'Other Data', buckets.low, 't-low', 'b-gray');
+
+  document.getElementById('cntBadge').textContent = used.size;
+  
+  // Highlight Form
+  let newHtml = formHtml;
+  buckets.matched.forEach(item => {
+    const reg = new RegExp('(' + escRx(item.label) + '[\\s:]+)([_\\s\\.]{3,})', 'i');
+    newHtml = newHtml.replace(reg, `$1<span class="mf">${item.value}</span>`);
+  });
+  writeFrame(newHtml);
 }
 
-function exportPDF(){
-  const frame = document.getElementById('docFrame');
-  frame.contentWindow.focus();
-  frame.contentWindow.print();
+function renderBucket(container, title, items, tCls, bCls) {
+  if(!items.length) return;
+  const h = document.createElement('div'); h.className='sec-lbl'; h.textContent=title;
+  container.appendChild(h);
+  
+  items.sort((a,b)=>b.score - a.score).forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'ecard';
+    card.innerHTML = `
+      <div class="etype ${tCls}">${item.label}</div>
+      <div class="ev">${item.value}</div>
+      <div class="ebar-track"><div class="ebar-fill ${bCls}" style="width:${item.score}%"></div></div>
+      <div class="epct">${item.score}% Match · Trace: ${getTrace(item.value)}</div>
+    `;
+    card.onclick = () => {
+      navigator.clipboard.writeText(item.value);
+      card.classList.add('copied');
+      notify('Copied!');
+      setTimeout(()=>card.classList.remove('copied'), 1000);
+    };
+    container.appendChild(card);
+  });
 }
 
-// Resizer logic
+function exportPDF() {
+  const f = document.getElementById('docFrame');
+  f.contentWindow.focus();
+  f.contentWindow.print();
+}
+
+// Simple Resizer
 const rz = document.getElementById('resizer');
-const sb = document.getElementById('sidebar');
+const sb = document.querySelector('.sidebar');
 rz.onmousedown = () => {
-  document.onmousemove = e => { sb.style.width = (window.innerWidth - e.clientX) + 'px'; };
-  document.onmouseup = () => { document.onmousemove = null; };
+  document.onmousemove = e => {
+    let w = window.innerWidth - e.clientX;
+    if(w > 200 && w < 600) sb.style.width = w + 'px';
+  };
+  document.onmouseup = () => document.onmousemove = null;
 };
 </script>
 </body>
